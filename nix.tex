@@ -7,12 +7,13 @@
 \titlelabel{\thetitle. }
 \titleformat*{\section}{\bf}
 \titleformat*{\subsection}{\bf}
-\usepackage[margin=2cm]{geometry}
 \pagenumbering{gobble}
 
 \usepackage{amsmath} 
 \usepackage{hyperref} 
 \usepackage{fullpage}
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{epsf}
 
 
 \title{WIP: Nix Reborn}
@@ -44,6 +45,12 @@ Nix originated in 2011, a first attempt at examining manycore OS design starting
 The result was achieved in about one month of effort with a small team\cite{Ballesteros2012}.  This is also a tribute to the simplicity of the Plan9
 architecture. % composed of: Enrique Soriano, Charles Forsyth, Jim McKie, Francisco J. Ballesteros, Noah Evans, Gorka Guardiola and Ron Minnich.
 The results were promising but the effort faltered, due to funding, Plan9 licensing constraints, and modern hardware support.
+
+When the processor industry hit a limit when trying to improve efficiency by inceasing frequency improvements had to come from
+another source: increasing the number of cores, enabling parallel processing.
+But operating systems have lagged behind.
+Though all modern operating systems support multi-core systems, no significant modifications to the timesharing model have occurred.
+As multi-core machines gain more and more cores --- now reaching into the thousands in some cases \cite{Ditzel2022} --- the question arrises if it remains sensible to treat all cores equally in terms of distribution of user workloads and operating system support work.
 
 Nix was the answer to a question: what if, rather than having CPUs with thousands of cores, each running a kernel and programs; we had, e.g., 32 kernel-capable cores and 1024 cores that could only run programs?
 What would that system look like? 
@@ -79,17 +86,20 @@ These in turn, though minor on a single compute resource, scale into terrible wa
 With the advent of manycore NUMA architectures we can consider dedicating cores to workloads.
 This designation can be done dynamically, allowing a mix of timeshared cores and application cores.
 The original Nix implementation introduced:
+\noindent
+\epsfbox{nix_fig.ps}
+
+\noindent
+{\hfil(cyan is used for user code; orange for kernel one; greyed when waiting for right slot of time in TC case)\hfil}
 \begin{itemize}
 \item Timesharing Core (TC): a common core running kernel and user code in a time sharing fashion;
-\item Application Core (AC): a core running user code without any interrupt (even without clock interrupts);
-\item Kernel Core (KC): a core that only runs kernel code on demand;
-\item eXclusive Core (XC): experimental; a core that is wired to a process instead of the usual reverse, and runs both user and kernel core for this process.
+\item Application Core (AC): a core running user code without any interrupt (even without clock interrupts)---on the illustration, the ACV and ACS are just to emphasize that when using multiple cores, there can be cores with varying capabilities, and a task assigned, because it fits, to a core with vectorial capabilities (ACV), while another task could be assigned to some other unspecified specialized (ACS) one;\item Kernel Core (KC): a core that only runs kernel code on demand;
+\item eXclusive Core (XC): experimental; a core that is wired to a process instead of the usual reverse, and runs both user and kernel code for this process.
 \end{itemize}
 
 As exemplified by the last experimental role, testing various workloads is necessary to identify the roles needed depending on the nature of the tasks.  This would allow maximum flexibility while still maintaining transparency for the user.
 The communication between cores was done by sending active messages.
 The initial tests were rather good and the purpose is to restart evaluating both the questions and the solution on now-current hardware.
-
 \section{The port to 9front}
 The initial port was started with a "pull on the thread" inventory.
 We pulled the Nix tree into a 9front installation, pared away most of the libraries and userland, and started building the Nix kernel in that environment.
@@ -108,17 +118,27 @@ These flags can be used alone to transition the current process, or combined wit
 When RFACORE is set, the Proc's variable $procctl$ is set to $Proc_toac$, which triggers a new case in $_procctl()$ that pushes the process to an AC.
 RFTCORE does the converse.
 
-\subsection{Squidboy}
-Squidboy is the per-core starting entry point of the kernel.
+\subsection{Squidboy and Nix process isolation}
+Nix isolates processes from the OS using two mechanisms: by refusing external interrupts at Application Cores, and by using a diffirent interrupt and syscall table for Application Cores than for Timesharing Cores.
+At time of writing we have not yet examined external interrupt routing in 9front. We hope to address this during the 2025 IWP9 hackathon.
+As far as interrupts and syscalls, the change here was straightforward: we provide a second handler tables $acidthandlers$ in the file {\b nix.s}, directly analogous to the usual $idthandlers$ which $squidboy()$ then installs for those cores that are ACs.
+$Squidboy()$ is the per-core starting entry point of the kernel.
 Nix modifies Squidboy to read a kernel configuration variable $nixac$ containing a comma-separated list of cores that should be ACs.
-When starting on a core named in this list squidboy jumps to $acsched()$ instead of following the usual path through $schedinit()$.
-$acsched()$ is largely as described in the original Nix paper, waiting in a loop for either a process or for a syscall, with the change of kernel handled by updating the MMU TLB mappings for the process.
+When starting on a core named in this list $squidboy()$ jumps to $acsched()$ instead of following the usual path through $schedinit()$.
+$acsched()$ is largely as described in the original Nix paper, waiting in a loop for a process continuation to execute.  
+Once the continuation is launched the loop does not return, and is only re-entered after AC syscall or trap processing.
 
-\subsection{Sysycalls}
-Nix forwards almost all syscalls from the process running on AC to a TC for handling.
-This happens by changing the TLB mappings to point back to the usual Plan9 kernel, and by indicating the process is runable.
-The regular $sched()$ call can then pick up the process and manage its trap or syscall, and the existing trap or syscall is re-executed.
-For the syscall state, the instruction point is appropriately updated to re-execute the syscall; for a trap, the CPU architecture assures the trapping instruction is still in the instruction pointer.
+\subsection{Scheduling}
+The scheduling process is an in the original Nix: when transfering control from TC to AC, the Proc state is set to $Exotic$, which stops the TC from scheduling the process; we call this process stub the "handler" for the Proc, and it remains on the TC waiting to be scheduled again.
+When a process hits a trap or syscall on the AC that needs to be hanled on the TC, $ready()$ is called to signal that it should be scheduled again on the TC, effectively clearing the $Exotic$ state, and passes on a continuation for the executing process to the TC. 
+The AC then exits handling that Proc and waits for its next unit of work, which is only the same Proc if the syscall or trap was handled successfully and wasn't an exit.
+
+\subsection{Sysycalls and Traps}
+Nix's trap handlers are minimal: in practice only traps which are errors (double-faults, IPIs, IrqTimer are all considered errors if they are delivered to an AC) are handled on the AC.  The remainder, along with syscalls, are forwarded to a TC for handling.
+This is accomplished by calling $ready()$ on the Proc, after which the AC waits for the next workload.
+Meanwhile, the Proc now being in the ready state causes a return from $sched()$ in the handler process's $runac()$.
+This return includes the cause of the exit, either a trap or a syscall, and a continuation of the AC process to call to continue the process if needed.
+The $runacore()$ function then dispatches to the appropriate trap or syscall handler and on successful handling invokes the continuation using $runac()$ once again.
 
 \section{Current state}
 Nix runs again! 
@@ -126,9 +146,14 @@ Two versions exist, one close to the original NIX integrated in 9legacy, and the
 It is possible to launch a process in both versions using the acexec command assign a task to a core.  
 
 This is still very much a work in progress.
-The $RFTCORE$ rfork flag is not yet implemented/tested.
-Multi-core programs that execute on multiple ACs are untested.
-Efficient producer-consumer relationships across ACs probably require a better mechanism than spin-locks; monior/mwait instructions aren't available in userland, so some extensions in that direction are likely required.
+\begin{itemize}
+\item The $RFTCORE$ rfork flag is not yet implemented/tested.
+\item Multi-core programs that execute on multiple ACs are untested.
+\item We do not yet implement Nix's optimistic semaphores or tubes.
+\item Interrupt routing still needs to be addressed.
+\item Efficient producer-consumer relationships across ACs probably require a better mechanism than spin-locks; monior/mwait instructions aren't available in userland, so some extensions in that direction are likely required.
+\item Nix threads and system call queues are not implemented.
+\end{itemize}
 
 \section{Bibliography}
 \bibliographystyle{plain}
