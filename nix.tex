@@ -13,7 +13,7 @@
 \usepackage{hyperref} 
 \usepackage{fullpage}
 \usepackage[a4paper,margin=2cm]{geometry}
-\usepackage{epsf}
+\usepackage{graphics}
 
 
 \title{WIP: Nix Reborn}
@@ -86,8 +86,9 @@ These in turn, though minor on a single compute resource, scale into terrible wa
 With the advent of manycore NUMA architectures we can consider dedicating cores to workloads.
 This designation can be done dynamically, allowing a mix of timeshared cores and application cores.
 The original Nix implementation introduced:
+
 \noindent
-\epsfbox{nix_fig.ps}
+\includegraphics{nix_fig.eps}
 
 \noindent
 {\hfil(cyan is used for user code; orange for kernel one; greyed when waiting for right slot of time in TC case)\hfil}

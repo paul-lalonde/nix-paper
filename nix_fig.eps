@@ -1,0 +1,3343 @@
+%!PS-Adobe-2.0
+%%Creator: dvips (kerTeX) 6.10 from 5.76 Copyright 1997 Radical Eye Software (www.radicaleye.com)
+%%Title: texput.dvi
+%%CreationDate: Sat May  3 17:08:08 2025
+%%Pages: 2
+%%PageOrder: Ascend
+%%BoundingBox: 0 0 421 99
+%%DocumentFonts: cmmi10 tex-latin1/Times-Bold CMR10
+%%EndComments
+%DVIPSCommandLine: /usr/pkg/bin/kertex/dvips -O -60bp,26bp texput.dvi
+%DVIPSParameters: dpi=600
+%DVIPSSource:  TeX output 2025.05.03:1708
+%%BeginProcSet: tex.ips
+% The following defines procedures assumed and used by program "dvips"
+% and must be downloaded or sent as a header file for all TeX jobs.
+% Originated by Neal Holtz, Carleton University, Ottawa, Canada
+%      <holtz@cascade.carleton.cdn>
+%      June, 1985
+%
+%   Hacked by tgr, July 1987, stripped down to bare essentials,
+%   plus a few new commands for speed.
+%
+%   Hacked by don, December 1989, to give characters top down and to
+%   remove other small nuisances; merged with tgr's compression scheme
+%
+% To convert this file into a downloaded file instead of a header
+% file, uncomment all of the lines beginning with %-%
+%
+%   To observe available VM, uncomment the following.
+%   (The first ten lines define a general 'printnumber' routine.)
+%
+% /VirginMtrx 6 array currentmatrix def
+% /dummystring 20 string def
+% /numberpos 36 def
+% /printnumber { gsave VirginMtrx setmatrix
+%   /Helvetica findfont 10 scalefont setfont
+%   36 numberpos moveto
+%   /numberpos numberpos 12 add def
+%   dummystring cvs show
+%   grestore
+%   } bind def
+% /showVM { vmstatus exch sub exch pop printnumber } def
+% /eop-aux { showVM } def
+%
+%-%0000000 			% Server loop exit password
+%-%serverdict begin exitserver
+%-%  systemdict /statusdict known
+%-%  {statusdict begin 9 0 3 setsccinteractive /waittimeout 300 def end}
+%-% if
+
+/TeXDict 300 dict def   % define a working dictionary
+TeXDict begin           % start using it.
+/N {def} def
+/B {bind def} N
+/S {exch} N
+/X { S N } B
+/TR {translate} N
+
+% The output of dvips assumes pixel units, Resolution/inch, with
+% increasing y coordinates corresponding to moving DOWNWARD.
+% The PostScript default is big point units (bp), 72/inch, with
+% increasing y coordinates corresponding to moving UP; the
+% following routines handle conversion to dvips conventions. 
+
+% Let the PostScript origin be (xps,yps) in dvips coordinates.
+
+/isls false N
+/vsize 11 72 mul N
+/hsize 8.5 72 mul N
+/landplus90 { false } def % make this true to flip landscape
+
+/@rigin                 % -xps -yps @rigin -   establishes dvips conventions
+  { isls { [ 0 landplus90 { 1 -1 } { -1 1 } ifelse 0 0 0 ] concat } if
+    72 Resolution div 72 VResolution div neg scale
+    isls { landplus90 { VResolution 72 div vsize mul 0 exch }
+                      { Resolution -72 div hsize mul 0 } ifelse TR } if
+    Resolution VResolution vsize -72 div 1 add mul TR
+% As bad as setmatrix is, it is better than misalignment.
+    [ matrix currentmatrix
+       { dup dup round sub abs 0.00001 lt {round} if } forall
+       round exch round exch
+    ] setmatrix } N
+
+/@landscape { /isls true N } B
+
+/@manualfeed
+   { statusdict /manualfeed true put
+   } B
+
+        % n @copies -   set number of copies
+/@copies
+   { /#copies X
+   } B
+
+% Bitmap fonts are called Fa, Fb, ..., Fz, F0, F1 . . . Ga . . .
+% The calling sequence for downloading font foo is
+%           /foo df charde1 ... chardefn E 
+% where each chardef is
+%           <hexstring> wd ht xoff yoff dx charno D 
+%  or       <hexstring> wd ht xoff yoff dx I
+%  or       <hexstring> charno D
+%  or       <hexstring> I
+
+/FMat [1 0 0 -1 0 0] N
+/FBB [0 0 0 0] N
+
+/nn 0 N /IE 0 N /ctr 0 N
+/df-tail       % id numcc maxcc df-tail -- initialize a new font dictionary
+  {
+%   dmystr 2 fontname cvx (@@@@) cvs putinterval  % put name in template
+    /nn 8 dict N              % allocate new font dictionary
+    nn begin
+        /FontType 3 N
+	/FontMatrix fntrx N
+	/FontBBox FBB N
+        string /base X
+        array /BitMaps X
+        /BuildChar {CharBuilder} N
+        /Encoding IE N
+        end
+    dup { /foo setfont }          %  dummy macro to be filled in
+       2 array copy cvx N         %  have to allocate a new one
+    load                          %  now we change it
+%      0 dmystr 6 string copy       %  get a copy of the font name
+       0 nn put
+%      cvn cvx put                  %  and stick it in the dummy macro
+    /ctr 0 N                      %  go, count, and etc.
+    [                               %  start next char definition
+  } B
+/df {
+   /sf 1 N
+   /fntrx FMat N
+   df-tail
+} B
+/dfs { div /sf X
+   /fntrx [ sf 0 0 sf neg 0 0 ] N
+   df-tail
+} B
+
+/E { pop nn dup definefont setfont } B
+
+% the following is the only character builder we need.  it looks up the
+% char data in the BitMaps array, and paints the character if possible.
+% char data  -- a bitmap descriptor -- is an array of length 6, of
+%          which the various slots are:
+
+/ch-width {ch-data dup length 5 sub get} B % the number of pixels across
+/ch-height {ch-data dup length 4 sub get} B % the number of pixels tall
+/ch-xoff  {128 ch-data dup length 3 sub get sub} B % num pixels right of origin
+/ch-yoff  {ch-data dup length 2 sub get 127 sub} B % number of pixels below origin
+/ch-dx  {ch-data dup length 1 sub get} B     % number of pixels to next character
+/ch-image {ch-data dup type /stringtype ne
+      { ctr get /ctr ctr 1 add N } if
+   } B                        % the hex string image, or array of same
+%      /id ch-image N                          % image data
+/id 0 N /rw 0 N /rc 0 N /gp 0 N /cp 0 N /G 0 N /sf 0 N
+
+/CharBuilder    % fontdict ch Charbuilder -     -- image one character
+     {save 3 1 roll S dup /base get 2 index get S /BitMaps get S get
+      /ch-data X pop
+      /ctr 0 N
+      ch-dx 0 ch-xoff ch-yoff ch-height sub
+      ch-xoff ch-width add ch-yoff
+      setcachedevice
+      ch-width ch-height true
+      [1 0 0 -1 -.1 ch-xoff sub ch-yoff .1 sub]
+% begin code for uncompressed fonts only
+      {ch-image} imagemask
+      restore
+  } B
+% end code for uncompressed fonts only
+% % here's the alternate code for unpacking compressed fonts
+%      /id ch-image N                          % image data
+%      /rw ch-width 7 add 8 idiv string N      % row, initially zero
+%      /rc 0 N                                 % repeat count
+%      /gp 0 N                                 % image data pointer
+%      /cp 0 N                                 % column pointer
+%      { rc 0 ne { rc 1 sub /rc X rw } { G } ifelse } imagemask
+%    restore
+% } B
+% /G { { id gp get /gp gp 1 add N
+%   dup 18 mod S 18 idiv pl S get exec } loop } B
+% /adv { cp add /cp X } B
+% /chg { rw cp id gp 4 index getinterval putinterval
+%         dup gp add /gp X adv } B
+% /nd { /cp 0 N rw exit } B
+% /lsh { rw cp 2 copy get dup 0 eq { pop 1 } { dup 255 eq { pop 254 }
+%     { dup dup add 255 and S 1 and or } ifelse } ifelse put 1 adv } B
+% /rsh { rw cp 2 copy get dup 0 eq { pop 128 } { dup 255 eq { pop 127 }
+%     { dup 2 idiv S 128 and or } ifelse } ifelse put 1 adv } B
+% /clr { rw cp 2 index string putinterval adv } B
+% /set { rw cp fillstr 0 4 index getinterval putinterval adv } B
+% /fillstr 18 string 0 1 17 { 2 copy 255 put pop } for N
+% /pl [
+%    { adv 1 chg }
+%    { adv 1 chg nd }
+%    { 1 add chg }
+%    { 1 add chg nd }
+%    { adv lsh }
+%    { adv lsh nd }
+%    { adv rsh }
+%    { adv rsh nd }
+%    { 1 add adv }
+%    { /rc X nd }
+%    { 1 add set }
+%    { 1 add clr }
+%    { adv 2 chg }
+%    { adv 2 chg nd }
+%    { pop nd } ] dup { bind pop } forall N
+% % end of code for unpacking compressed fonts
+
+               % in the following, the font-cacheing mechanism requires that
+                % a name unique in the particular font be generated
+
+/D            % char-data ch D -    -- define character bitmap in current font
+  { /cc X
+    dup type /stringtype ne {]} if
+    nn /base get cc ctr put
+    nn /BitMaps get S ctr S
+    sf 1 ne {
+       dup dup length 1 sub dup 2 index S get sf div put
+    } if
+    put
+    /ctr ctr 1 add N
+  } B
+
+/I            % a faster D for when the next char follows immediately
+  { cc 1 add D } B
+
+/bop           % %t %d bop -  -- begin a brand new page, %t=pageno %d=seqno
+  {
+    userdict /bop-hook known { bop-hook } if
+    /SI save N
+    @rigin
+%
+%   Now we check the resolution.  If it's correct, we use RV as V,
+%   otherwise we use QV.
+%
+    0 0 moveto
+    /V matrix currentmatrix
+    dup 1 get dup mul exch 0 get dup mul add .99 lt
+    {/QV} {/RV} ifelse load def
+    pop pop
+  } N
+
+/eop           % - eop -              -- end a page
+  { % eop-aux  % -- to observe VM usage
+    SI restore
+    userdict /eop-hook known { eop-hook } if
+    showpage
+  } N
+
+/@start         % hsz vsz mag dpi vdpi name @start -   -- start everything
+  {
+    userdict /start-hook known { start-hook } if
+    pop % the job name string is used only by start-hook
+    /VResolution X
+    /Resolution X
+    1000 div /DVImag X
+    /IE 256 array N
+    0 1 255 {IE S 1 string dup 0 3 index put cvn put} for
+    65781.76 div /vsize X
+    65781.76 div /hsize X
+  } N
+
+/p {show} N        %  the main character setting routine
+
+/RMat [ 1 0 0 -1 0 0 ] N % things we need for rules
+/BDot 260 string N
+/rulex 0 N /ruley 0 N
+/v {                   % can't use ...fill; it makes rules too big
+   /ruley X /rulex X
+   V
+} B
+%
+%   What we need to do to get things to work here is tragic.
+%
+/V {} B /RV
+%
+%   Which do we use?  The first if we are talking to Display
+%   PostScript, the latter otherwise.
+%
+statusdict begin /product where
+   { pop false [(Display) (NeXT) (LaserWriter 16/600)] {
+      dup length product length le {
+            dup length product exch 0 exch getinterval eq
+            { pop true exit } if
+         } { pop } ifelse
+      } forall }
+   { false } ifelse end
+{ {
+   gsave
+      TR -.1 .1 TR 1 1 scale rulex ruley
+      false RMat { BDot } imagemask
+   grestore
+} }
+{ {
+   gsave
+      TR -.1 .1 TR rulex ruley scale 1 1
+      false RMat { BDot } imagemask
+   grestore
+} } ifelse B
+%
+%   We use this if the resolution doesn't match.
+%
+/QV {
+   gsave
+      newpath transform round exch round exch itransform moveto
+      rulex 0 rlineto 0 ruley neg rlineto
+      rulex neg 0 rlineto fill
+   grestore
+} B
+%
+/a { moveto } B    % absolute positioning
+/delta 0 N         % we need a variable to hold space moves
+%
+%   The next ten macros allow us to make horizontal motions that
+%   are within 4 of the previous horizontal motion with a single
+%   character.  These are typically used for spaces.
+%
+/tail { dup /delta X 0 rmoveto } B
+/M { S p delta add tail } B
+/b { S p tail } B      % show and tail!
+/c { -4 M } B
+/d { -3 M } B
+/e { -2 M } B
+/f { -1 M } B
+/g { 0 M } B
+/h { 1 M } B
+/i { 2 M } B
+/j { 3 M } B
+/k { 4 M } B
+%
+%   These next allow us to make small motions (-4..4) cheaply.
+%   Typically used for kerns.
+%
+/w { 0 rmoveto } B
+/l { p -4 w } B
+/m { p -3 w } B
+/n { p -2 w } B
+/o { p -1 w } B
+/q { p 1 w } B
+/r { p 2 w } B
+/s { p 3 w } B
+/t { p 4 w } B
+%
+%  x is good for small vertical positioning.
+%  And y is good for a print followed by a move.
+%
+/x { 0 S rmoveto } B
+/y { 3 2 roll p a } B
+%
+%   The bos and eos commands bracket sections of downloaded characters.
+%
+/bos { /SS save N } B
+/eos { SS restore } B
+
+end  % revert to previous dictionary
+
+%%EndProcSet
+%%BeginProcSet: texps.ips
+% Thanks for some changes to:
+%+ This is TEXPS.LPRO as modified by Rob Hutchings 1992Apr02
+%+ My comments are marked as %+ 
+% PostScript prolog for using resident fonts.
+%+ Provision is made to change the encoding scheme in special instructions. 
+%+ This is the only way to access the 20 characters which are present in  
+%+ a standard PostScript font, but not included in the standard encoding. 
+% All we do is change the widths so that PostScript positioning 
+% matches the assumptions of dvips.
+
+% The calling sequence defining font foo to be resident font Bar is
+%+       /foo wd(n-1) ... wd1 wd0 {specials} n atsize /Bar rf
+% where each character width wdi is in pixels,
+%+ and atsize is the desired font size, after magnification, in pixels.
+% The locations of unused characters are specified by codes of the form
+% `m [', denoted m consecutive unused characters, interspersed among the
+% widths of the n characters that are actually used.
+% The total n + (sum of m's) must equal 256.
+
+%
+TeXDict begin
+%
+/rf 
+% We copy everything but the FID entry of the resident font
+% (just as in section 5.6 of the Red Book second edition).
+% We also don't copy UniqueID, even though we want to, because
+% this messes up systems that cache the fonts, for some
+% PostScript fonts.
+{ findfont dup length 1 add dict begin 
+        { 1 index /FID ne 2 index /UniqueID ne and
+          {def} {pop pop} ifelse } forall
+% Now the top entry on the stack is the desired size, which
+% we use to construct the matrix to transform the font.
+% The way we do this is constrained by our desire to leave
+% a hook for extending and/or slanting; the hook also allows
+% the font to be reencoded extremely cheaply.
+% Extend and slant are coded in positions 0 and 2 of the matrix,
+% whose default values are atsize and 0
+        [ 1 index 0
+% at this point we pick up and obey the special instructions
+        6 -1 roll exec  
+% which changes `{s} n at [ at 0' to `n at [ AT S' (see SlantFont below)
+% and then we will insert the rest of the matrix.  It is imperative that
+%   VResolution Resolution div mul
+% be used instead of
+%   VResolution mul Resolution div
+% because the latter gives us floating point roundoff error that
+% causes the interpreter to think the font isn't square, and this
+% leads to substantially deteriorated character glyphs.
+        0 exch 5 -1 roll VResolution Resolution div mul neg 0 0 ]
+% The top of stack is now `n [ AT 0 S at*aspect 0 0]';
+% we use this matrix to scale the font later.  We store it in Metrics,
+% which we'll give a different definition to anyway later.
+       /Metrics exch def
+% Now we start the dictionary of length n that will eventually be Metrics:
+        dict begin
+% When the font is used the width in the Metrics dictionary will be 
+% multiplied by FontMatrix[0] to give the actual character width. 
+% We therefore divide each width by FontMatrix[0] before storing.
+% (We assume that FontMatrix has the form [ x 0 0 x 0 0 ].)
+% Note that using FontMatrix[0] is safer than assuming milli-em units, 
+% and that loading the widths on to the stack rather than using an array 
+% allows the following simple coding.
+%   We also allow marks on the stack ([) to mean that we don't use
+%   that character and thus don't need any Metrics entry for it.
+%   This saves lots of VM.
+%   A sequence of m marks is represented by `m ['.
+        Encoding { exch dup type /integertype ne
+          {pop pop 1 sub dup 0 le {pop} {[} ifelse}
+             {FontMatrix 0 get div Metrics 0 get div def} ifelse } forall
+% Now we put the widths dictionary into the font, after grabbing
+% the current definition of Metrics back.
+        Metrics /Metrics currentdict end def
+% and duplicate /foo so that it can be used both in definefont
+% and as the name of the macro, which is created first as a 
+% non-executable array so that we can put the new font dictionary 
+% itself inside the macro;
+        [ 2 index currentdict end definefont 3 -1 roll makefont
+% this involves a circumlocution to insert the setfont command.
+          /setfont cvx ] 
+% Finally the macro is made executable and given the name /foo.
+        cvx def } def
+%
+%   Now here's some oblique hackery... an example of making
+%   variants of a resident font look like it is resident.
+%+ Since dvips has to repeat the special instructions for each 
+%+ incarnation of such a hacked font, there appears to be little virtue in 
+%+ the halfway-house of naming the hacked font. I have therefore omitted 
+%+ the PostScript names of the modified fonts; 
+%+ the defining lines in psfonts could be
+%+            rptmro Times-Roman ".167 SlantFont"
+%+ My versions of SlantFont and ExtendFont are obeyed in the core of the
+%+ main macro, at a point where the stack contains
+%+           atsize [ x y
+%+ where x and y will become entries 0 and 2 of the transformation matrix.
+%   Optionally replace the `slant' by `angle ObliqueSlant';
+%   note that the ObliqueSlant of Times-Italic is -15.5 (negative).
+%
+/ObliqueSlant {   % angle ObliqueSlant slant
+    dup sin S cos div neg
+    } B
+
+% A slant is multiplied by atsize and added to entry 2 (initially 0)
+/SlantFont {4 index mul add} def 
+
+% An extend is simply a multiplier for entry 0 (initially atsize)
+/ExtendFont {3 -1 roll mul exch} def
+
+% Since at the point at which the hook is obeyed, the current dictionary
+% is that of the new font and writeable, it is trivial to include the
+% option of reencoding the font.
+/ReEncodeFont {/Encoding exch def} def
+end
+
+%%EndProcSet
+%%BeginProcSet: special.ips
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%     header for the \special command
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   The structure of the PostScript produced by dvips for \special is:
+%         @beginspecial
+%           - any number of @hsize, @hoffset, @hscale, etc., commands
+%         @setspecial
+%           - the user's file of PostScript commands
+%         @endspecial
+
+TeXDict begin
+/SDict 200 dict N
+SDict begin
+
+/@SpecialDefaults
+  { /hs 612 N
+    /vs 792 N
+    /ho 0 N
+    /vo 0 N
+    /hsc 1 N
+    /vsc 1 N
+    /ang 0 N
+    /CLIP 0 N
+    /rwiSeen false N
+    /rhiSeen false N
+    /letter {} N /note {} N /a4 {} N /legal {} N
+  } B
+
+%
+%   The following definition sets up the units that hscale/vscale are in.
+%   For certain sites this might require change, but it is
+%   recommended instead that any macro packages that require
+%   hscale/vscale set the units appropriately via
+%
+%   \special{! /@scaleunit 1 def }
+%
+%   if global, or
+%
+%   \special{" /@scaleunit 1 def }
+%
+%   before each instance if multiple macro packages with
+%   different requirements are being used.
+%
+/@scaleunit 100 N
+%       s @hscale  -    set scale factor
+/@hscale {@scaleunit div /hsc X} B
+/@vscale {@scaleunit div /vsc X} B
+
+%       d @hsize   -    specify a horizontal clipping dimension
+/@hsize {/hs X /CLIP 1 N} B
+/@vsize {/vs X /CLIP 1 N} B
+
+/@clip {/CLIP 2 N} B
+
+%       d @hoffset -    specify a shift for the figure
+/@hoffset {/ho X} B
+/@voffset {/vo X} B
+
+%       a @angle   -    set rotation angle
+/@angle {/ang X} B
+
+%
+%   Here we handle bounding box calculations, if necessary.
+%
+/@rwi { 10 div /rwi X /rwiSeen true N } B % rwi will be real width after scaling
+/@rhi { 10 div /rhi X /rhiSeen true N } B % rhi will be real height after scaling
+/@llx { /llx X } B
+/@lly { /lly X } B
+/@urx { /urx X } B
+/@ury { /ury X } B
+
+/magscale true def
+
+end % of SDict
+
+/@MacSetUp
+  { userdict /md known  % if md is defined
+      { userdict /md get type /dicttype eq      % and if it is a dictionary
+	{
+        userdict begin                       % expand it if necessary
+           md length 10 add md maxlength ge
+           {/md md dup length 20 add dict copy def}if
+        end
+	md begin                             % then redefine some stuff
+	/letter {} N
+	/note {} N
+	/legal {} N
+	/od{txpose
+	    1 0 mtx defaultmatrix dtransform S atan/pa X
+	    newpath clippath mark
+	    {transform{itransform moveto}}
+	    {transform{itransform lineto}}
+	    { 6 -2 roll transform
+	      6 -2 roll transform
+	      6 -2 roll transform
+	      { itransform 6 2 roll
+		itransform 6 2 roll
+		itransform 6 2 roll
+		curveto
+	      }
+	    }
+	    {{closepath}}
+	    pathforall newpath counttomark array astore /gc xdf
+	    pop ct 39 0 put
+	    10 fz 0 fs 2 F/|______Courier fnt invertflag{PaintBlack}if
+	}N
+	/txpose{
+	    pxs pys scale ppr aload pop
+	    por {
+		noflips {
+		    pop S neg S TR pop 1 -1 scale
+		}if
+		xflip yflip and {
+		    pop S neg S TR 180 rotate 1 -1 scale
+		    ppr 3 get ppr 1 get neg sub neg ppr 2 get
+		    ppr 0 get neg sub neg TR
+		}if 
+		xflip yflip not and {
+		    pop S neg S TR pop 180 rotate
+		    ppr 3 get ppr 1 get neg sub neg 0 TR
+		}if
+		yflip xflip not and {
+		    ppr 1 get neg ppr 0 get neg TR
+		}if
+	    }
+	    {
+		noflips {
+		    TR pop pop 270 rotate 1 -1 scale
+		}if
+		xflip yflip and {
+		    TR pop pop 90 rotate 1 -1 scale
+		    ppr 3 get ppr 1 get neg sub neg ppr 2 get
+		    ppr 0 get neg sub neg TR
+		}if
+		xflip yflip not and {
+		    TR pop pop 90 rotate ppr 3 get
+		    ppr 1 get neg sub neg 0 TR
+		}if
+		yflip xflip not and {
+		    TR pop pop 270 rotate ppr 2 get
+		    ppr 0 get neg sub neg 0 S TR
+		}if
+	    }ifelse
+	    scaleby96 {
+		ppr aload pop 4 -1 roll add 2 div 3 1 roll add 2 div 2 copy
+		TR .96 dup scale neg S neg S TR
+	    }if
+	}N
+	/cp {pop pop showpage pm restore}N
+        end
+      }if
+    } if    
+  } N
+
+%
+%   The following procedure brings us back to PostScript size.  It takes
+%   into account the current global dvi magnification, so graphics
+%   scale with the document.
+%
+/normalscale {
+    Resolution 72 div VResolution 72 div neg scale
+    magscale { DVImag dup scale } if
+    0 setgray
+} N
+
+% this will be invoked as the result of a \special command (for the
+% inclusion of PostScript graphics).  The basic idea is to change all
+% scaling and graphics back to defaults, but to shift the origin
+% to the current position on the page.
+
+/@beginspecial          % - @beginspecial -     -- enter special mode
+  { SDict begin
+    /SpecialSave save N
+    gsave
+    normalscale
+    currentpoint TR    %set the current point as the user's origin
+    @SpecialDefaults    % setup default offsets, scales, sizes, and angle
+    count /ocount X /dcount countdictstack N
+  } N
+
+/@setspecial    % to setup user specified offsets, scales, sizes (for clipping)
+  {
+    CLIP 1 eq
+      { newpath 0 0 moveto hs 0 rlineto 0 vs rlineto hs neg 0 rlineto 
+        closepath clip }
+    if
+    ho vo TR
+    hsc vsc scale
+    ang rotate
+    rwiSeen {
+       rwi urx llx sub div
+       rhiSeen { rhi ury lly sub div } { dup } ifelse
+       scale llx neg lly neg TR
+    } {
+       rhiSeen { rhi ury lly sub div dup scale llx neg lly neg TR } if
+    } ifelse
+    CLIP 2 eq
+    { newpath llx lly moveto urx lly lineto urx ury lineto llx ury lineto
+      closepath clip }
+    if
+    /showpage {} N
+    /erasepage {} N
+    /copypage {} N
+    newpath
+  } N
+
+/@endspecial            % - @endspecial -       -- leave special mode
+  { count ocount sub {pop} repeat
+    countdictstack dcount sub {end} repeat
+    grestore SpecialSave restore
+    end
+  } N
+/@defspecial
+  {
+    SDict begin
+  } N
+/@fedspecial
+  {
+    end
+  } B
+
+%%% macros for tpic
+/li             % x y li -              -- draw line to
+  { lineto
+  } B
+
+/rl             % dx dy rl -            -- draw relative line
+  { rlineto
+  } B
+
+/rc             % x0 y0 x1 y1 y2 y2 rc  -- draw bezier curve
+  { rcurveto
+  } B
+
+/np		% np -			-- start a new path and save currentpoint
+  { /SaveX currentpoint /SaveY X N   % remember current point
+    1 setlinecap
+    newpath
+  } N
+
+/st             % st -                  -- draw the last path and restore currentpoint
+  { stroke
+    SaveX SaveY moveto                  % restore the current point
+  } N
+
+/fil             % fil                    -- fill the last path and restore currentpoint
+  { fill
+    SaveX SaveY moveto                  % restore the current point
+  } N
+
+/ellipse        % xc yc xrad yrad startAngle endAngle ellipse
+    {
+        /endangle X
+        /startangle X
+        /yrad X
+        /xrad X
+
+        /savematrix matrix currentmatrix N
+
+        TR xrad yrad scale
+        0 0 1 startangle endangle arc
+        savematrix setmatrix
+    } N
+%%% end of macros for tpic
+end                     % revert to previous dictionary
+
+%%EndProcSet
+%%BeginFont: CMR10
+%!PS-AdobeFont-1.0: CMR10 003.002
+%%Title: CMR10
+%Version: 003.002
+%%CreationDate: Mon Jul 13 16:17:00 2009
+%%Creator: David M. Jones
+%Copyright: Copyright (c) 1997, 2009 American Mathematical Society
+%Copyright:  (<http://www.ams.org>), with Reserved Font Name CMR10.
+% This Font Software is licensed under the SIL Open Font License, Version 1.1.
+% This license is in the accompanying file OFL.txt, and is also
+% available with a FAQ at: http://scripts.sil.org/OFL.
+%%EndComments
+
+FontDirectory/CMR10 known{/CMR10 findfont dup/UniqueID known{dup
+/UniqueID get 5000793 eq exch/FontType get 1 eq and}{pop false}ifelse
+{save true}{false}ifelse}{false}ifelse
+11 dict begin
+/FontType 1 def
+/FontMatrix [0.001 0 0 0.001 0 0 ]readonly def
+/FontName /CMR10 def
+/FontBBox {-40 -250 1009 750 }readonly def
+/UniqueID 5000793 def
+/PaintType 0 def
+/FontInfo 9 dict dup begin
+ /version (003.002) readonly def
+ /Notice (Copyright \050c\051 1997, 2009 American Mathematical Society \050<http://www.ams.org>\051, with Reserved Font Name CMR10.) readonly def
+ /FullName (CMR10) readonly def
+ /FamilyName (Computer Modern) readonly def
+ /Weight (Medium) readonly def
+ /ItalicAngle 0 def
+ /isFixedPitch false def
+ /UnderlinePosition -100 def
+ /UnderlineThickness 50 def
+end readonly def
+/Encoding 256 array
+ 0 1 255 { 1 index exch /.notdef put} for
+dup 49 /one put
+readonly def
+currentdict end
+currentfile eexec
+d9d66f633b846ab284bcf8b0411b772de5ce3dd325e55798292d7bd972bd75fa
+0e079529af9c82df72f64195c9c210dce34528f540da1ffd7bebb9b40787ba93
+51bbfb7cfc5f9152d1e5bb0ad8d016c6cfa4eb41b3c51d091c2d5440e67cfd71
+7c56816b03b901bf4a25a07175380e50a213f877c44778b3c5aadbcc86d6e551
+e6af364b0bfcaad22d8d558c5c81a7d425a1629dd5182206742d1d082a12f078
+0fd4f5f6d3129fcfff1f4a912b0a7dec8d33a57b5ae0328ef9d57addac543273
+c01924195a181d03f5054a93b71e5065f8d92fe23794d2db9b8591e5f01442d8
+569672cf86b91c3f79c5ddc97c190ee0082814a5b5a2a5e77c790f087e729079
+24a5ac880dded58334dd5e8dc6a0b2bd4f04b17334a74bf8ff5d88b7b678a04a
+2255c050cb39a389106b0c672a1912afa86a49efd02e61e6509e50ee35e67944
+8fc63d91c3d2794b49a0c2993832bc4cdc8f7bd7575ad61bcdf42e2e421aa93e
+3ff9e4fad980256d8b377043a07fc75d6169338028692cca8cd1fe92fd60ad26
+d57b7519b80a8f8dce9cee5cdf720af268d3c14099498a843d76e3b6c0328f24
+d36efe7f5c4e5b5c610da63a48e26be9fc0c5ff9236372483c265681dd26303b
+962bf46bd2ddd7e5ab42c609d12e83d21a55046c3e50e41c605ef2aff78f91b2
+0f9f17d90dee6171aa799accff77e3e4d9793d1d8b51fc0e8979b8e2752c9e72
+a51720c018dcee02736480daae55f5f1910727de3b9fa8d0bed2eff3bc887aad
+72838b7a894541d923d3d253139cdd747b185238b79e569f24483c423ba5ea55
+860289c4ca80924224a52b8e68cd15d47487340c7fc925100f08a0db63ec18a3
+2843c299201b3ffff69059b10ced881acb7d0115d735791ed587758150742b0a
+23af8fdde157c4571039d537e52e2b4b069e0aaf299d4aa3a36ea316d2b55479
+b72886c76c1a876d7558fc2fb0659e156cbb253b8466da34ade7b1506f8dc66e
+fe35dcac71451f8a426056e129a9cf21c41d7deb5ea6df7a72acad4bbca3e408
+1320bd7b37609a4db67b5df63e25f490b8de0666d17dfdd93ad510ed7b41be8b
+0f4c4b2c1348e047c61623cda21ef0e64b393eca207b812a7d6f49cc29d70529
+f6829881a092f98c934d70ce3c5bd2e48c3c57aecf77b55db937230737c3ab65
+c9bab8c1be847a4c61d1c0bdcdc192c225f1fe28b68b279cf3633287286cc18f
+c886e8c711e558d4961ed9b901920006c48f8795e1947eb63b4b6a63bdfdd1df
+ca3e9a354c37aa33a24990fb70fd2d369d1fc5c89a6bf0851caaef43215b2201
+ec5e09432d1df364f2eb570f8c001011a4fab268e40fb630082f53aa19fb8c34
+10e049f1f8de85082abdb8ecb5fca536f824aaa39f968d3585e469cb58727942
+36771ba5320dd8ccf58e545b9850865aa31607b8c7f0efce4a0b2bac4f48efd4
+b599fc52c4b9fa6ad36e0fccd3155b874d4fac8a02afd4cf6546842e31928a88
+06ea44c7cc03e03fdc1ab9e47f4d455f69eaf32d6fe4a3070a728b225687761e
+0f2d48138dfa3b2735bee1e654c8a6ab0e136d4dabf9b695f5ea9bdde81619a7
+875591a7f39b6493ffedc7c4812e18c36c85ee597b7ffa207ac57ed8187f13b9
+997df098620557843f7f9994fc561d70554b8509c137fbf881a77f86460f53ce
+7bfbbc9c94167fb3d408bbf95e7672e3db32f8cc2baa731d6caf1675ddf0f055
+62773d9f37e0a473fcb74cd67483b66ec7b42cf841625b26a32201c05af07b1e
+0e3687f260a04f2296abdf3e5df972ac56470af0b4538c0b4acffc2c1b5309bd
+8a2510d228d9f41e01783e63ae1cd0cc827f15ee2783e818972e418c75b03c1e
+fb4d564a6d26ff8c8b0ff6dc625647fc5a8d9d9ebc2b36eae9c8dd412d663927
+8f6432c3d9ad4c6c478eeea0d4a9f111908a8f37adc0c4e28bbaa0e5556a8ed4
+6850a673851de8991338e59b906ee8506203110b315d40ef4a59133a6cd85f0f
+f35123176fb801a6464ff3f77bc8828b782c9b8a18416b6ccfe557dbf14856a0
+a3162a68723d538f95bcaaf9be7b369226a72c401612fef48d59c927fd8265df
+9d29026f732491709ca50b9feade55f701a62076addc0bd478eec530f9119d25
+64c87f445e9b8c529ab3a207986f75ddccacf3db48878853a1c3b27d8590e81c
+e20f1271df019e9c2ce34847b2b69ae9061cea57bf2d3ce3dc261d5955e6b3bf
+8b933a345b3bcc7a302f7614bcd0c2b6e1f3078271a85f232a5b3b9de2e7f048
+cd36ddfc316467a01866276cfa8d0218abcfb0c543752eef59635f48f92ef7ca
+f035c7363be7436f564d1b4fc37d47a2096c886cfd6ea73dfeac3762873e9bac
+2faadcdac6d83d56e4eec7ded6b1b99d6dda7ce8c35c6fca645940de0150cead
+4b6463eef7edaa509b463d0dbec43e7c43f9ff16b6a8688723855b9937faf16e
+f89688373c84dcf5a57cc309e14b7f72528b1209e7f276306fcfef4df98c72f7
+a276840ee2280b88e8f20374b964199b6cf1b47e8d9125a8581532fcf9f45e9e
+3491a9d5357d37b1c23a2e5ad04e02d74aa80e35e77847821b987e7c4fc3f037
+c9e95ca50067ec8f16a8bddb8412e7954bbd115147ec48539ea6bebd1f3885a4
+d12ba32338337728a2c3a8f496b5cae086585ee6ed1b20ea3fabd269d4b786c3
+ee0c3d9bee58001d4d174af4e87a7fdbbe4c3d270e2689840e4c4b6113bdab88
+78126dd066da8e0251a6af2ea6458214b249809ed92f4ea6966d40d4596d86d6
+f05921c7814884501db8a7941adba5702bf2b0b9a852b7bc8710087974f2fed4
+a8d7b89e643a0950b0258a41a74ae4f84c004f9536ce1e3de91e8e050c97c32b
+0ad953d0b8f4935235f55ceb7727f9ee6e45931cd281d31f5e2a52772c405368
+7f7a2d14b2f7815f8b316efbe767fae0636f44bdb1bc9b27aae79fddc0038a30
+c02b86d0e98b16ce7a7ee8be6a3db03296c5b05a51ff470991b74cf893343bdd
+4a2cab4b7e28ae4778b42ef31e789cb1ae28a8f0b112e399d73a388d3fc41cf8
+c2edd7e3e6ee21bf01a833214f2d2e278b8f701b9a9068a34a78c34faa85e602
+42233cccc5899ae65f026de91a4f184f0e626721c4cd3afeb6e9a1b4ab410b81
+6a49a5e38b4137e36b95e2ff0eb3a3bd4337137096e4062bd7d13c5137194ce8
+5a1415c9f73095eebaeabf2929be8f203295a2ab6792d1031cdf4f96a58def44
+b848b687eedd4239a6fb1944ce6527523fa3641693b1c128a675f98c67c2dd8a
+3f1161a1ee2a7bf7598d3a9eb560a94b4e8d58d1c38ba3d58dde6d54a5f49af3
+e03b9f7fb23617001e0cb03b7938bcf7681f7bd0721fe1720b723a7da0694b9a
+7637935655c5f147bd7fa15d1377500f7f192337a9466a74a5917fd51163ead5
+f26bc9867f2709ef15459f35710eb47b86ca032aece26aba9f79674e30e0a8d1
+ab25099101bed7fea68ebaa28641f5ede00d0c15c4fdd500db5c9bacdf18b320
+b14f7b836a063bb1ba30d382b2a8f3583cfbfdb1777aecb306948ecd8d8c9d3e
+d36fa733c15e4059215b383854846bf6f7596006d9dd1cabd8e331248aadf6b8
+c206534bb545f44fc7e4bc9f3761e9849ce28c0e9e5d99325fe771f931288d98
+9c43138a805663a9e63f4738929b5b03123b6bdf0a135c08ca3ac695b72e92b5
+667f6f0fc8a7079eebd572ceba5c21720961611021e775ad8dd8e6e7c4c85969
+282a49464913b85c47f7d3a875548fa3139cb5dbd78fafc6b7074e59665a568b
+1ac494564515a3d8b64ad0b6a4cc6a186f35513289519403e937be3fc969a10e
+d68694e705376b718056047c006b73fc88c87b3d84bfbb15e7f874cff12cc2e8
+e4a8b70f158de0c15b4c5e933f0011f1f654d33104ae72543a11f588f56d3acd
+b8c83a5543c2d5b8b2561e56f53fa9749cc80d84678380f55175c853698614fe
+b73b29eb8556ec0453a03ae894a752ddd14ad72776ab32d13d3175b844f643d0
+4ad36a6b97149d9dcbd8b7f1f50554acddeb0c9aea463a65aa6972c2c384cec2
+4344c89de7bd914549a9a3cf9139e94fc75aa93dc591977fc3519391677a3086
+b7f23351ad6b1fed39e7129629880870d0bcb035c9f9bbafbb1eb9a822f58343
+9ba0a907b5494007fc9874b51cd27802332c3b411bce6a544153e51d0458e568
+80367ef4fe6aa8a0970445fae112a40f4c48b94346f937f35afbe27c24422040
+6f7e2dbec532c1fd99b713580ed318951f90d0e88314639ed7e8b886191d6dd3
+ff0db44bfa5a7bac6102783ee01911e05de270d41afa7944fd6b420ad5bafd3d
+02c95ff77d231dfc977823262827be5b601f4f3702a528bc5bd4d87a789f6c97
+6df65c4103a35e20352801825bf2af07300f359a673ff845e87f391c058d8729
+f7109b379d8ae27506cb3dfd16f6298efc66ecb27a9d5f59749e6264180b0bcb
+bd4be0b13d8d4c3344af3d6bf4b73c29d63dc19208c751f5f319888d7d4049a2
+9126cd28e985fca986cc33f2667f752a0b2f175a99f90d31906ae108e82f5641
+386ba7f9b360bb3bd5d5952bf2167ce10aae9d41fdb63f4e69873d6339972a2b
+5f6007adea075c8eec10c090c74647098439be7d9f48a9f79c2104252009b8e6
+c44d7508192d58de42b0962dd1b7cb6255f4b67325a456c069cb52b905eb4918
+35d92452d0781cb7e65672dd43d6d3762e0ffef0f1c8d63163631a71a2963d96
+17f96a0c984b7fddb9334560558291386cfd35e9736a942c7afea53e1e4937a5
+ad56e66e88e9a8ad46c70349173ab81de285a54855b416df01d8caf036150143
+86aaa4c94903d6005dbabef8f9bf283894fa8c71284293e436605856d3c4c785
+9978286b021f0f696f43a1ee8f810e15c7882edaf03c5b574ba492ac5633beee
+a3f65b521f12fd11ca4ed32d0b666253ca496daa243108947445c55cee525233
+5e6c43fc5fae35244e811f81009f514442da21da2b4e9608be8d594520b1062a
+8ae3ed07d00f031d443d1412699892da2b252299eeb4d9ea8ff3b9d785b4e490
+dd6eefd55a77bd924ad6c289734de20f59885194050ba0a60182952cb292c18b
+bd65b784c913c0dd1e131a31aaf2c4892c664ec5bf16e712d34225079ab4361f
+4c7afa56e499cb6ccd1fbdad41b89f66a8a82ad7963ebbf5b19f8352241c0b5d
+f1e13343a4955b47e88ded9e0757651ad5d059ea86ce7db05f95bfa92db1d1f5
+11ab1018aafe3bdc4cd6379d797b1e7654e5b772bb6c910c7c405d0264cb1275
+d49937c3005744092e5bb3c8b40cb98f3beb519ac3d3ab76202af6e08d0d43dc
+379e2583342d33c3323a5b696759dbbf1b85f638403a43113787b0a5e4f98812
+3ec6eb768f4a745fdb4fa0da70d2f610e6ae1cce290c5ffb6c4fcbe5520b43c3
+6e5f966f4355e7d67662b4ddea480e0fef650c65a0f0660b608a61c623de59f7
+5fcd9e5f47bdb5800e2a49446f0b142677694f3e8ba4257378fd9fa8c8a572c6
+a8eafed79325804d4993fc0a513ca992f8d4a8305c2394d026def0262d173d15
+0b2c662b9b9c6ba7cb2d04ca83b136f9162c42ef686ad2a31f40066937d6a04e
+cbf632f1ddee29f414daf945e0fadf1a231752fe7500e57fb0e22622fdf22e75
+6de999948162df7b9bcb4587499613b6331e03b7972309490642de2ec4f72a18
+95dece59bc117ecc2717aae37eb52f1167965faf5101af2bc1c31cd3dd175969
+37bf73d697f59a11000fc8ff94912dab48134b39567817d9419fd0d3b231297d
+1723331ef3c334582cc012a78cff55fb19132d91a74353632270986ae645b8f5
+c0584564eb8c71a6e5faa52ab96fbb210571bf6c1a2ea223ebc7aed8fde47af4
+89a429bcef68407f3399a882a567e70b4fc69ab47d6c05097deb3d912cf1591c
+6b82cb6feb1f72c135a4ceda64c4afc62dc84c2aed0b31d0ef7f8962dfe28d7e
+3a91314bdefd9fa692422529a6679f184537fa92be3e429c289e9a1834f07117
+a0e7f1f4fe6862870165a43bb9e430ed07faebbee0469ec79f9f539ce25df296
+5963d2268a0acd1fd54beee6ab200d52ee7ca4d49a747530252164d6ef5430e4
+e0242edde5955c5fe7e3837cac40ed2a6fa8f9801f9986471eb57e1f38cb3a82
+a382741b4ed3a575c4967186e99d2c3c121b4c91c8d50b26cb97be9ab4bb224b
+dcb7135145914b06c9de48dc53a69cb4308a5491627279ab90ab26f6e14dbf51
+ab0e4a9bea64f916f1643a10bd91fd365f8b774e79a8383e3d5d5595a92a7912
+0eeb341213bbe6ee21957f6d46e654b9ff6cf65ee8dcfb710e326dcd9a488120
+96d3602d5c2037033b284f266a229cb1641405594de3ed1fb6ddb1496ea0598e
+131d2c5860474f78cf937f03c5d1cc29170d33a7f68b8bd1a601423002dd3106
+620e6d8c423f7ac7682fc2f4d97189ebc2b19e7db5adcba62d17a0d4a7a1d4b3
+e727687eb9638498547058815ee958dd81dd937ad19b1492d773090b1324f187
+41eed75c8cea47a75119435fe806e82f214852505081f02b43ed1bc67fc4d1f5
+a6686665035b3612cc4e166a646a786a7b0bbc54030252338e496929b6a54ad4
+7ca90cc54ae1ac275e523982ecef5fbb741d00b65981667fe2453fe3750ebde3
+3b30e9540172ca5d94982ee1e99379d6ce06f82b65c423aa95ce42cb0730c80a
+eea34ccc827ae92fad3d38d19b5966a48184f1182a47397c12475058e3cd011d
+0f0ce4dc30ecca87406a1f1d699893163d8d8e604d0b987f8586f4b746c38d4b
+bac2257d0d6844b31d532f66f380438844d45ae831226df075ee6cd391a2daf9
+54bcd4e03e9981f829b0965ad78ebe8d41cff2acee386dfc8037958959ba8b87
+2a7dca0964dec6a7459d4206dae3ed201031db2ea02819d3c12de56cec8f9a85
+8ba6b0feff091f827ad6fc5f117904b0dca0aa3173fa49c62ba5a5cadb35f648
+7801660cff3fd476819b149294ea953dae6a4d55f9d3aaedbef13159794e128a
+b0b557ce775d0429e4d4b7edd061ca689ae0745a19658e04c2cd5dab627f801b
+16a4babf2f8bf2ea218916f82f288104717af149bbbab11637311236b540a9fd
+344852c8384b87fecf7d233f8e7d0b88ab11ee92991fbbddecde4765c999d2c4
+ef8913c1ba706fd995b05199361e754e486963bc9cd80db42eb766c43ea8efe8
+1ccd0bd8b5523cbe7ce1a709afa648817acd9af2985e285dd9dee2a4e0c77b13
+bb59f6899bbaf1038d5a0660b358015381b30731415aa81e601f8462c7f80d11
+71d0f9fdeca392aefe4a828dcddfa642174ad8c48cd6f3ed28a25ddb0f768c5e
+d07364011a5daba61ba49aa10a71a260aaa7d5ddaa898831b388b738a836529a
+8f7a123c89d9e36b65ddc7723843df8f6ef79d8c7cfc3def3b8ad39b3e4ee0f1
+27100efa9ad45829598df39441855fbbf98d82008a7b64af0a919051b5f4002d
+7b3e4778ed61b9b4a0bb41a1e212e94d9244154c459d9fea7d250f6a789d944b
+074135f16c063ece58708ebb2a2b286a71824017c08139cf73320f32127b2633
+140570a13420256dba85988640cde5aa4a2448cdbf277d74115b22a1380c54d0
+2fb55dc394f720b75e4d7bf4799f06d7a9742b09e13a1d9f9ce503b5666a480e
+6781dd2ac4273925e4733fd17b219b1af8049b7af1d37327a28311208158cf2e
+fcffc0f10d731e60c19d08ac9c16f39fb896f5b432d5463f7f4275f6ece30944
+d74888511c34bac3acab64c7116ad6112eca722456734a2d016a3f2b41d60a4a
+97818c16224a70ecd13cd6ce5af85c2fd5460c3adea16a3d222752729bafae27
+6072cb3a3a0e653458ecb394763865162146f58b4259676f8b661e90cafe3ed0
+836d626266d173fbb4b4b4dc6e2a0c02381114a761189f3c2b6436f6e437590b
+f702424a63fe39f4eebf059c16bec49d30dbf450f44198ba633d86bc49849775
+87ac23bb61e3b50164f07b9c73fa6aeed24164a97731f59b6097d205a0180068
+e300acf7d1290304e81c94d9928885faddda29056bfcd9fbbbc704c1db36ed9b
+d06eb28a3e1a31db992e807f01f184636af41946ae2a0cc06490a6f2344ce06e
+0302c1a38a488d927137f33cbde53e1936c6792cc3f723dde8bb7ec366b1c4d8
+671907035a9cc7c841c2aabb7ab2995e06225216273f464c2f2019d228d2b24a
+76ab48a5f3e427f9d8dca84038b66a81059787dd2dedd85a173d28fe87c787d4
+5fad1874f16834552f07ae388e74bbe7c9f1481a9f4fa367c0eae7d16e43e2d4
+4b674485fc2a2e44539d5b06b02862dd37a99ac9d0b65152e785f6fe7c0f95c0
+267a328e21241b588c78fc3593e8f7bc0bd0c43e7d8b24a367e7f6a7dd772ee0
+0b3fad75e84f3f886b6e473ea65107155201ec2b483bac063e97459100812157
+c58d1f524ae2771bdf394d114ad82ead38373f2b90847abdb86ebc45b8ba9013
+69d93b51c54635b8f65b4e28ac588daeced5853308
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+
+cleartomark
+{restore}if
+%%EndFont 
+TeXDict begin 27628440 6446636 1000 600 600 (texput.dvi)
+@start /Fa 206[42 49[{}1 83.022 /CMR10 rf end
+%%EndProlog
+%%BeginSetup
+%%Feature: *Resolution 600dpi
+TeXDict begin
+%%PaperSize: A4
+
+%%EndSetup
+%%Page: 1 1
+1 0 bop -500 217 a @beginspecial @setspecial
+%%BeginDocument: nix_fig.1
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: -12 0 408 98 
+%%Creator: MetaPost
+%%CreationDate: 2025.05.03:1708
+%%Pages: 1
+%%DocumentFonts: cmmi10 tex-latin1/Times-Bold
+
+ /cmmi10
+ /cmmi10 def
+
+ /tex-latin1@Times-Bold
+ /tex-latin1@Times-Bold def
+/fshow {exch findfont exch scalefont setfont show}bind def
+%%EndProlog
+%%Page: 1 1
+newpath 56.69205 41.75587 moveto
+57.88757 41.75587 lineto
+57.88757 42.9514 lineto
+57.88757 50.46957 54.90054 57.67891 49.58481 62.99466 curveto
+44.26906 68.3104 37.05972 71.29742 29.54155 71.29742 curveto
+28.34602 71.29742 lineto
+20.82785 71.29742 13.61852 68.3104 8.30276 62.99466 curveto
+2.98703 57.67891 0 50.46957 0 42.9514 curveto
+0 41.75587 lineto
+0 34.2377 2.98703 27.02837 8.30276 21.71262 curveto
+13.61852 16.39688 20.82785 13.40985 28.34602 13.40985 curveto
+29.54155 13.40985 lineto
+37.05972 13.40985 44.26906 16.39688 49.58481 21.71262 curveto
+54.90054 27.02837 57.88757 34.2377 57.88757 41.75587 curveto
+57.88757 42.9514 lineto
+56.69205 42.9514 lineto
+56.69205 35.43323 53.70502 28.22389 48.38928 22.90814 curveto
+43.07353 17.5924 35.8642 14.60538 28.34602 14.60538 curveto
+29.54155 14.60538 lineto
+22.02338 14.60538 14.81404 17.5924 9.49829 22.90814 curveto
+4.18256 28.22389 1.19553 35.43323 1.19553 42.9514 curveto
+1.19553 41.75587 lineto
+1.19553 49.27405 4.18256 56.48338 9.49829 61.79913 curveto
+14.81404 67.11487 22.02338 70.1019 29.54155 70.1019 curveto
+28.34602 70.1019 lineto
+35.8642 70.1019 43.07353 67.11487 48.38928 61.79913 curveto
+53.70502 56.48338 56.69205 49.27405 56.69205 41.75587 curveto closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+57.5887 42.05475 lineto
+57.5887 42.65253 lineto
+56.99092 42.65253 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+57.4335 45.01755 lineto
+57.4335 45.61533 lineto
+56.83572 45.61533 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+56.96931 47.94835 lineto
+56.96931 48.54613 lineto
+56.37154 48.54613 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+56.20116 50.81427 lineto
+56.20116 51.41205 lineto
+55.60338 51.41205 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+55.138 53.58417 lineto
+55.138 54.18195 lineto
+54.54022 54.18195 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+53.79112 56.22777 lineto
+53.79112 56.82555 lineto
+53.19334 56.82555 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+52.1752 58.71617 lineto
+52.1752 59.31395 lineto
+51.57742 59.31395 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+50.30807 61.02188 lineto
+50.30807 61.61966 lineto
+49.7103 61.61966 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+48.20981 63.12015 lineto
+48.20981 63.71793 lineto
+47.61203 63.71793 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+45.9041 64.98727 lineto
+45.9041 65.58505 lineto
+45.30632 65.58505 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+43.4157 66.6032 lineto
+43.4157 67.20097 lineto
+42.81792 67.20097 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+40.7721 67.95007 lineto
+40.7721 68.54785 lineto
+40.17432 68.54785 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+38.0022 69.01323 lineto
+38.0022 69.61101 lineto
+37.40442 69.61101 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+35.13628 69.78139 lineto
+35.13628 70.37917 lineto
+34.5385 70.37917 lineto
+ closepath fill
+newpath 28.6449 42.65253 moveto
+28.6449 42.05475 lineto
+29.24268 42.05475 lineto
+32.20547 70.24557 lineto
+32.20547 70.84335 lineto
+31.6077 70.84335 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+29.24268 70.99855 lineto
+28.6449 70.99855 lineto
+28.6449 70.40077 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+26.27988 70.84335 lineto
+25.6821 70.84335 lineto
+25.6821 70.24557 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+23.34908 70.37917 lineto
+22.7513 70.37917 lineto
+22.7513 69.78139 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+20.48315 69.61101 lineto
+19.88538 69.61101 lineto
+19.88538 69.01323 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+17.71326 68.54785 lineto
+17.11548 68.54785 lineto
+17.11548 67.95007 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+15.06966 67.20097 lineto
+14.47188 67.20097 lineto
+14.47188 66.6032 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+12.58125 65.58505 lineto
+11.98347 65.58505 lineto
+11.98347 64.98727 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+10.27554 63.71793 lineto
+9.67776 63.71793 lineto
+9.67776 63.12015 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+8.17728 61.61966 lineto
+7.5795 61.61966 lineto
+7.5795 61.02188 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+6.31015 59.31395 lineto
+5.71237 59.31395 lineto
+5.71237 58.71617 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+4.69423 56.82555 lineto
+4.09645 56.82555 lineto
+4.09645 56.22777 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+3.34735 54.18195 lineto
+2.74957 54.18195 lineto
+2.74957 53.58417 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+2.2842 51.41205 lineto
+1.68642 51.41205 lineto
+1.68642 50.81427 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+1.51604 48.54613 lineto
+0.91826 48.54613 lineto
+0.91826 47.94835 lineto
+ closepath fill
+newpath 28.6449 42.05475 moveto
+29.24268 42.05475 lineto
+29.24268 42.65253 lineto
+1.05185 45.61533 lineto
+0.45407 45.61533 lineto
+0.45407 45.01755 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+0.29887 42.65253 lineto
+0.29887 42.05475 lineto
+0.89665 42.05475 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+0.45407 39.68973 lineto
+0.45407 39.09195 lineto
+1.05185 39.09195 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+0.91826 36.75893 lineto
+0.91826 36.16115 lineto
+1.51604 36.16115 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+1.68642 33.893 lineto
+1.68642 33.29523 lineto
+2.2842 33.29523 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+2.74957 31.12311 lineto
+2.74957 30.52533 lineto
+3.34735 30.52533 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+4.09645 28.4795 lineto
+4.09645 27.88173 lineto
+4.69423 27.88173 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+5.71237 25.9911 lineto
+5.71237 25.39333 lineto
+6.31015 25.39333 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+7.5795 23.6854 lineto
+7.5795 23.08762 lineto
+8.17728 23.08762 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+9.67776 21.58713 lineto
+9.67776 20.98935 lineto
+10.27554 20.98935 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+11.98347 19.72 lineto
+11.98347 19.12222 lineto
+12.58125 19.12222 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+14.47188 18.10408 lineto
+14.47188 17.5063 lineto
+15.06966 17.5063 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+17.11548 16.7572 lineto
+17.11548 16.15942 lineto
+17.71326 16.15942 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+19.88538 15.69405 lineto
+19.88538 15.09627 lineto
+20.48315 15.09627 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+22.7513 14.92589 lineto
+22.7513 14.32811 lineto
+23.34908 14.32811 lineto
+ closepath fill
+newpath 29.24268 42.05475 moveto
+29.24268 42.65253 lineto
+28.6449 42.65253 lineto
+25.6821 14.4617 lineto
+25.6821 13.86392 lineto
+26.27988 13.86392 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+28.6449 13.70872 lineto
+29.24268 13.70872 lineto
+29.24268 14.3065 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+31.6077 13.86392 lineto
+32.20547 13.86392 lineto
+32.20547 14.4617 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+34.5385 14.32811 lineto
+35.13628 14.32811 lineto
+35.13628 14.92589 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+37.40442 15.09627 lineto
+38.0022 15.09627 lineto
+38.0022 15.69405 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+40.17432 16.15942 lineto
+40.7721 16.15942 lineto
+40.7721 16.7572 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+42.81792 17.5063 lineto
+43.4157 17.5063 lineto
+43.4157 18.10408 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+45.30632 19.12222 lineto
+45.9041 19.12222 lineto
+45.9041 19.72 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+47.61203 20.98935 lineto
+48.20981 20.98935 lineto
+48.20981 21.58713 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+49.7103 23.08762 lineto
+50.30807 23.08762 lineto
+50.30807 23.6854 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+51.57742 25.39333 lineto
+52.1752 25.39333 lineto
+52.1752 25.9911 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+53.19334 27.88173 lineto
+53.79112 27.88173 lineto
+53.79112 28.4795 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+54.54022 30.52533 lineto
+55.138 30.52533 lineto
+55.138 31.12311 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+55.60338 33.29523 lineto
+56.20116 33.29523 lineto
+56.20116 33.893 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+56.37154 36.16115 lineto
+56.96931 36.16115 lineto
+56.96931 36.75893 lineto
+ closepath fill
+newpath 29.24268 42.65253 moveto
+28.6449 42.65253 lineto
+28.6449 42.05475 lineto
+56.83572 39.09195 lineto
+57.4335 39.09195 lineto
+57.4335 39.68973 lineto
+ closepath fill
+ 1 setgray
+newpath 55.88792 42.05475 moveto
+55.88792 42.65253 lineto
+55.88792 49.7196 53.08012 56.49638 48.08333 61.49318 curveto
+43.08653 66.48997 36.30975 69.29778 29.24268 69.29778 curveto
+28.6449 69.29778 lineto
+21.57782 69.29778 14.80104 66.48997 9.80424 61.49318 curveto
+4.80745 56.49638 1.99965 49.7196 1.99965 42.65253 curveto
+1.99965 42.05475 lineto
+1.99965 34.98767 4.80745 28.21089 9.80424 23.2141 curveto
+14.80104 18.2173 21.57782 15.4095 28.6449 15.4095 curveto
+29.24268 15.4095 lineto
+36.30975 15.4095 43.08653 18.2173 48.08333 23.2141 curveto
+53.08012 28.21089 55.88792 34.98767 55.88792 42.05475 curveto closepath fill
+newpath 55.29015 42.05475 moveto
+55.88792 42.05475 lineto
+55.88792 42.65253 lineto
+55.29015 42.65253 lineto
+55.29015 35.58545 52.48235 28.80867 47.48555 23.81187 curveto
+42.48875 18.81508 35.71198 16.00728 28.6449 16.00728 curveto
+29.24268 16.00728 lineto
+22.1756 16.00728 15.39882 18.81508 10.40202 23.81187 curveto
+5.40523 28.80867 2.59743 35.58545 2.59743 42.65253 curveto
+2.59743 42.05475 lineto
+2.59743 49.12183 5.40523 55.8986 10.40202 60.8954 curveto
+15.39882 65.8922 22.1756 68.7 29.24268 68.7 curveto
+28.6449 68.7 lineto
+35.71198 68.7 42.48875 65.8922 47.48555 60.8954 curveto
+52.48235 55.8986 55.29015 49.12183 55.29015 42.05475 curveto closepath fill
+ 0 setgray
+newpath 28.34602 42.9514 moveto
+28.34602 41.75587 lineto
+29.54155 41.75587 lineto
+57.88757 41.75587 lineto
+57.88757 42.9514 lineto
+56.69205 42.9514 lineto
+ closepath fill
+newpath 28.34602 42.9514 moveto
+28.34602 41.75587 lineto
+29.54155 41.75587 lineto
+54.09 55.9289 lineto
+54.09 57.12442 lineto
+52.89447 57.12442 lineto
+ closepath fill
+newpath 28.34602 42.9514 moveto
+28.34602 41.75587 lineto
+29.54155 41.75587 lineto
+43.71457 66.30432 lineto
+43.71457 67.49985 lineto
+42.51904 67.49985 lineto
+ closepath fill
+newpath 28.34602 41.75587 moveto
+29.54155 41.75587 lineto
+29.54155 42.9514 lineto
+29.54155 71.29742 lineto
+28.34602 71.29742 lineto
+28.34602 70.1019 lineto
+ closepath fill
+newpath 28.34602 41.75587 moveto
+29.54155 41.75587 lineto
+29.54155 42.9514 lineto
+15.36853 67.49985 lineto
+14.173 67.49985 lineto
+14.173 66.30432 lineto
+ closepath fill
+newpath 28.34602 41.75587 moveto
+29.54155 41.75587 lineto
+29.54155 42.9514 lineto
+4.9931 57.12442 lineto
+3.79758 57.12442 lineto
+3.79758 55.9289 lineto
+ closepath fill
+newpath 29.54155 41.75587 moveto
+29.54155 42.9514 lineto
+28.34602 42.9514 lineto
+0 42.9514 lineto
+0 41.75587 lineto
+1.19553 41.75587 lineto
+ closepath fill
+newpath 29.54155 41.75587 moveto
+29.54155 42.9514 lineto
+28.34602 42.9514 lineto
+3.79758 28.77838 lineto
+3.79758 27.58286 lineto
+4.9931 27.58286 lineto
+ closepath fill
+newpath 29.54155 41.75587 moveto
+29.54155 42.9514 lineto
+28.34602 42.9514 lineto
+14.173 18.40295 lineto
+14.173 17.20743 lineto
+15.36853 17.20743 lineto
+ closepath fill
+newpath 29.54155 42.9514 moveto
+28.34602 42.9514 lineto
+28.34602 41.75587 lineto
+28.34602 13.40985 lineto
+29.54155 13.40985 lineto
+29.54155 14.60538 lineto
+ closepath fill
+newpath 29.54155 42.9514 moveto
+28.34602 42.9514 lineto
+28.34602 41.75587 lineto
+42.51904 17.20743 lineto
+43.71457 17.20743 lineto
+43.71457 18.40295 lineto
+ closepath fill
+newpath 29.54155 42.9514 moveto
+28.34602 42.9514 lineto
+28.34602 41.75587 lineto
+52.89447 27.58286 lineto
+54.09 27.58286 lineto
+54.09 28.77838 lineto
+ closepath fill
+ 1 setgray
+newpath 54.7541 42.05475 moveto
+54.7541 42.65253 lineto
+54.7541 49.41888 52.06578 55.90729 47.2816 60.69145 curveto
+42.49744 65.47563 36.00903 68.16396 29.24268 68.16396 curveto
+28.6449 68.16396 lineto
+21.87854 68.16396 15.39014 65.47563 10.60597 60.69145 curveto
+5.8218 55.90729 3.13347 49.41888 3.13347 42.65253 curveto
+3.13347 42.05475 lineto
+3.13347 35.28839 5.8218 28.79999 10.60597 24.01582 curveto
+15.39014 19.23164 21.87854 16.54332 28.6449 16.54332 curveto
+29.24268 16.54332 lineto
+36.00903 16.54332 42.49744 19.23164 47.2816 24.01582 curveto
+52.06578 28.79999 54.7541 35.28839 54.7541 42.05475 curveto closepath fill
+newpath 54.15633 42.05475 moveto
+54.7541 42.05475 lineto
+54.7541 42.65253 lineto
+54.15633 42.65253 lineto
+54.15633 35.88617 51.468 29.39777 46.68382 24.6136 curveto
+41.89966 19.82942 35.41125 17.1411 28.6449 17.1411 curveto
+29.24268 17.1411 lineto
+22.47632 17.1411 15.98792 19.82942 11.20375 24.6136 curveto
+6.41957 29.39777 3.73125 35.88617 3.73125 42.65253 curveto
+3.73125 42.05475 lineto
+3.73125 48.8211 6.41957 55.30951 11.20375 60.09367 curveto
+15.98792 64.87785 22.47632 67.56618 29.24268 67.56618 curveto
+28.6449 67.56618 lineto
+35.41125 67.56618 41.89966 64.87785 46.68382 60.09367 curveto
+51.468 55.30951 54.15633 48.8211 54.15633 42.05475 curveto closepath fill
+ 0 setgray
+newpath 25.51141 71.29742 moveto
+25.51141 70.1019 lineto
+26.70694 70.1019 lineto
+32.37616 70.1019 lineto
+32.37616 71.29742 lineto
+32.37616 74.69897 lineto
+31.18063 74.69897 lineto
+25.51141 74.69897 lineto
+25.51141 73.50345 lineto
+25.51141 70.1019 lineto
+26.70694 70.1019 lineto
+26.70694 71.29742 lineto
+26.70694 74.69897 lineto
+26.70694 73.50345 lineto
+32.37616 73.50345 lineto
+31.18063 73.50345 lineto
+31.18063 70.1019 lineto
+31.18063 71.29742 lineto
+ closepath fill
+newpath 26.64523 73.50345 moveto
+27.84076 73.50345 lineto
+31.24234 73.50345 lineto
+31.24234 74.69897 lineto
+31.24234 76.73993 lineto
+30.04681 76.73993 lineto
+26.64523 76.73993 lineto
+26.64523 75.5444 lineto
+ closepath fill
+newpath 26.64523 74.69897 moveto
+27.84076 74.69897 lineto
+27.84076 76.73993 lineto
+27.84076 75.5444 lineto
+31.24234 75.5444 lineto
+30.04681 75.5444 lineto
+30.04681 73.50345 lineto
+30.04681 74.69897 lineto
+ closepath fill
+newpath 34.01523 80.19307 moveto
+35.21075 80.19307 lineto
+35.21075 81.3886 lineto
+35.21075 82.89223 34.61334 84.33409 33.5502 85.39725 curveto
+32.48705 86.46039 31.04518 87.0578 29.54155 87.0578 curveto
+28.34602 87.0578 lineto
+26.84239 87.0578 25.40053 86.46039 24.33737 85.39725 curveto
+23.27423 84.33409 22.67682 82.89223 22.67682 81.3886 curveto
+22.67682 80.19307 lineto
+22.67682 78.68944 23.27423 77.24757 24.33737 76.18442 curveto
+25.40053 75.12128 26.84239 74.52386 28.34602 74.52386 curveto
+29.54155 74.52386 lineto
+31.04518 74.52386 32.48705 75.12128 33.5502 76.18442 curveto
+34.61334 77.24757 35.21075 78.68944 35.21075 80.19307 curveto
+35.21075 81.3886 lineto
+34.01523 81.3886 lineto
+34.01523 79.88496 33.41782 78.4431 32.35468 77.37994 curveto
+31.29152 76.3168 29.84966 75.71939 28.34602 75.71939 curveto
+29.54155 75.71939 lineto
+28.03792 75.71939 26.59605 76.3168 25.5329 77.37994 curveto
+24.46976 78.4431 23.87234 79.88496 23.87234 81.3886 curveto
+23.87234 80.19307 lineto
+23.87234 81.6967 24.46976 83.13857 25.5329 84.20172 curveto
+26.59605 85.26486 28.03792 85.86227 29.54155 85.86227 curveto
+28.34602 85.86227 lineto
+29.84966 85.86227 31.29152 85.26486 32.35468 84.20172 curveto
+33.41782 83.13857 34.01523 81.6967 34.01523 80.19307 curveto closepath fill
+newpath 34.73163 80.34251 moveto
+35.62827 80.34251 lineto
+35.62827 81.23915 lineto
+35.62827 82.89316 34.97112 84.47922 33.80165 85.6487 curveto
+32.63217 86.81816 31.04611 87.47531 29.3921 87.47531 curveto
+28.49547 87.47531 lineto
+26.84146 87.47531 25.2554 86.81816 24.08592 85.6487 curveto
+22.91646 84.47922 22.25931 82.89316 22.25931 81.23915 curveto
+22.25931 80.34251 lineto
+22.25931 78.6885 22.91646 77.10245 24.08592 75.93297 curveto
+25.2554 74.7635 26.84146 74.10635 28.49547 74.10635 curveto
+29.3921 74.10635 lineto
+31.04611 74.10635 32.63217 74.7635 33.80165 75.93297 curveto
+34.97112 77.10245 35.62827 78.6885 35.62827 80.34251 curveto
+35.62827 81.23915 lineto
+34.73163 81.23915 lineto
+34.73163 79.58514 34.07448 77.99908 32.90501 76.8296 curveto
+31.73553 75.66014 30.14948 75.00299 28.49547 75.00299 curveto
+29.3921 75.00299 lineto
+27.7381 75.00299 26.15204 75.66014 24.98256 76.8296 curveto
+23.8131 77.99908 23.15594 79.58514 23.15594 81.23915 curveto
+23.15594 80.34251 lineto
+23.15594 81.99652 23.8131 83.58258 24.98256 84.75206 curveto
+26.15204 85.92152 27.7381 86.57867 29.3921 86.57867 curveto
+28.49547 86.57867 lineto
+30.14948 86.57867 31.73553 85.92152 32.90501 84.75206 curveto
+34.07448 83.58258 34.73163 81.99652 34.73163 80.34251 curveto closepath fill
+ 0.5 setgray
+newpath 34.61299 42.35364 moveto
+34.61299 43.85727 34.01558 45.29913 32.95244 46.36229 curveto
+31.88928 47.42543 30.44742 48.02284 28.94379 48.02284 curveto
+27.44016 48.02284 25.99829 47.42543 24.93513 46.36229 curveto
+23.872 45.29913 23.27458 43.85727 23.27458 42.35364 curveto
+23.27458 40.85 23.872 39.40814 24.93513 38.34499 curveto
+25.99829 37.28185 27.44016 36.68443 28.94379 36.68443 curveto
+30.44742 36.68443 31.88928 37.28185 32.95244 38.34499 curveto
+34.01558 39.40814 34.61299 40.85 34.61299 42.35364 curveto closepath fill
+ 0 setgray
+newpath 34.01523 41.75587 moveto
+35.21075 41.75587 lineto
+35.21075 42.9514 lineto
+35.21075 44.45503 34.61334 45.8969 33.5502 46.96005 curveto
+32.48705 48.0232 31.04518 48.6206 29.54155 48.6206 curveto
+28.34602 48.6206 lineto
+26.84239 48.6206 25.40053 48.0232 24.33737 46.96005 curveto
+23.27423 45.8969 22.67682 44.45503 22.67682 42.9514 curveto
+22.67682 41.75587 lineto
+22.67682 40.25224 23.27423 38.81038 24.33737 37.74722 curveto
+25.40053 36.68408 26.84239 36.08667 28.34602 36.08667 curveto
+29.54155 36.08667 lineto
+31.04518 36.08667 32.48705 36.68408 33.5502 37.74722 curveto
+34.61334 38.81038 35.21075 40.25224 35.21075 41.75587 curveto
+35.21075 42.9514 lineto
+34.01523 42.9514 lineto
+34.01523 41.44777 33.41782 40.0059 32.35468 38.94275 curveto
+31.29152 37.87961 29.84966 37.2822 28.34602 37.2822 curveto
+29.54155 37.2822 lineto
+28.03792 37.2822 26.59605 37.87961 25.5329 38.94275 curveto
+24.46976 40.0059 23.87234 41.44777 23.87234 42.9514 curveto
+23.87234 41.75587 lineto
+23.87234 43.2595 24.46976 44.70137 25.5329 45.76453 curveto
+26.59605 46.82767 28.03792 47.42508 29.54155 47.42508 curveto
+28.34602 47.42508 lineto
+29.84966 47.42508 31.29152 46.82767 32.35468 45.76453 curveto
+33.41782 44.70137 34.01523 43.2595 34.01523 41.75587 curveto closepath fill
+ 0.68 setgray
+newpath 6.5462 43.48755 moveto
+7.0144 55.51852 16.9037 65.03046 28.94379 65.03046 curveto
+40.98387 65.03046 50.87317 55.51852 51.34137 43.48755 curveto
+35.66313 43.48755 lineto
+35.10396 46.76212 32.26575 49.15675 28.94379 49.15675 curveto
+25.62183 49.15675 22.78362 46.76212 22.22444 43.48755 curveto
+ closepath fill
+ 0 setgray
+newpath 6.09789 43.93587 moveto
+6.09789 43.03923 lineto
+6.99452 43.03923 lineto
+7.46272 55.0702 17.35202 64.58214 29.3921 64.58214 curveto
+28.49547 64.58214 lineto
+40.53555 64.58214 50.42485 55.0702 50.89305 43.03923 curveto
+50.89305 43.93587 lineto
+35.21481 43.93587 lineto
+36.11145 43.93587 lineto
+35.55228 47.21043 32.71407 49.60507 29.3921 49.60507 curveto
+28.49547 49.60507 lineto
+25.17351 49.60507 22.3353 47.21043 21.77612 43.93587 curveto
+6.09789 43.93587 lineto
+6.09789 43.03923 lineto
+6.99452 43.03923 lineto
+22.67276 43.03923 lineto
+23.23193 46.3138 26.07014 48.70844 29.3921 48.70844 curveto
+28.49547 48.70844 lineto
+31.81743 48.70844 34.65564 46.3138 35.21481 43.03923 curveto
+36.11145 43.03923 lineto
+51.78969 43.03923 lineto
+51.78969 43.93587 lineto
+51.32149 55.96684 41.43219 65.47878 29.3921 65.47878 curveto
+28.49547 65.47878 lineto
+16.45538 65.47878 6.56609 55.96684 6.09789 43.93587 curveto closepath fill
+ 0.79 setgray
+newpath 51.34137 41.21973 moveto
+50.87317 29.18875 40.98387 19.67682 28.94379 19.67682 curveto
+16.9037 19.67682 7.0144 29.18875 6.5462 41.21973 curveto
+22.22444 41.21973 lineto
+22.78362 37.94516 25.62183 35.55052 28.94379 35.55052 curveto
+32.26575 35.55052 35.10396 37.94516 35.66313 41.21973 curveto
+ closepath fill
+ 0 setgray
+newpath 51.78969 40.77141 moveto
+51.78969 41.66805 lineto
+50.89305 41.66805 lineto
+50.42485 29.63707 40.53555 20.12514 28.49547 20.12514 curveto
+29.3921 20.12514 lineto
+17.35202 20.12514 7.46272 29.63707 6.99452 41.66805 curveto
+6.99452 40.77141 lineto
+22.67276 40.77141 lineto
+21.77612 40.77141 lineto
+22.3353 37.49684 25.17351 35.1022 28.49547 35.1022 curveto
+29.3921 35.1022 lineto
+32.71407 35.1022 35.55228 37.49684 36.11145 40.77141 curveto
+51.78969 40.77141 lineto
+51.78969 41.66805 lineto
+50.89305 41.66805 lineto
+35.21481 41.66805 lineto
+34.65564 38.39348 31.81743 35.99884 28.49547 35.99884 curveto
+29.3921 35.99884 lineto
+26.07014 35.99884 23.23193 38.39348 22.67276 41.66805 curveto
+21.77612 41.66805 lineto
+6.09789 41.66805 lineto
+6.09789 40.77141 lineto
+6.56609 28.74043 16.45538 19.2285 28.49547 19.2285 curveto
+29.3921 19.2285 lineto
+41.43219 19.2285 51.32149 28.74043 51.78969 40.77141 curveto closepath fill
+newpath 6.19713 51.60075 moveto
+6.19713 52.19853 lineto
+5.59935 52.19853 lineto
+4.34569 49.17209 3.70042 45.92834 3.70042 42.65253 curveto
+3.70042 42.05475 lineto
+3.70042 38.77893 4.34569 35.53519 5.59935 32.50874 curveto
+6.19713 32.50874 lineto
+6.19713 33.10652 lineto
+4.94347 36.13297 4.2982 39.37671 4.2982 42.65253 curveto
+4.2982 42.05475 lineto
+4.2982 45.33057 4.94347 48.57431 6.19713 51.60075 curveto closepath fill
+newpath 6.94583 33.24156 moveto
+7.19998 29.66502 lineto
+4.85065 32.3737 lineto
+ closepath fill
+newpath 51.69044 33.10652 moveto
+51.69044 32.50874 lineto
+52.28822 32.50874 lineto
+53.54189 35.53519 54.18715 38.77893 54.18715 42.05475 curveto
+54.18715 42.65253 lineto
+54.18715 45.92834 53.54189 49.17209 52.28822 52.19853 curveto
+51.69044 52.19853 lineto
+51.69044 51.60075 lineto
+52.9441 48.57431 53.58937 45.33057 53.58937 42.05475 curveto
+53.58937 42.65253 lineto
+53.58937 39.37671 52.9441 36.13297 51.69044 33.10652 curveto closepath fill
+newpath 50.94174 51.46571 moveto
+50.68759 55.04225 lineto
+53.03693 52.33357 lineto
+ closepath fill
+ 0 1 1 setrgbcolor
+newpath 28.94379 49.15675 moveto
+28.94379 65.03046 lineto
+30.92555 65.03047 32.89876 64.7707 34.81299 64.2578 curveto
+36.72722 63.74489 38.56595 62.98328 40.2822 61.9924 curveto
+32.34534 48.24533 lineto
+31.80405 48.43036 31.2568 48.59752 30.70451 48.74655 curveto
+30.12253 48.9036 29.53526 49.0404 28.94379 49.15675 curveto closepath fill
+ 0 setgray
+newpath 28.49547 48.70844 moveto
+29.3921 48.70844 lineto
+29.3921 49.60507 lineto
+29.3921 65.47878 lineto
+29.3921 64.58214 lineto
+29.39229 64.58214 lineto
+28.49565 64.58214 lineto
+30.47736 64.58215 32.4505 64.32237 34.36467 63.80948 curveto
+36.2789 63.29657 38.11763 62.53496 39.83388 61.54408 curveto
+39.83388 62.44072 lineto
+31.89702 48.69365 lineto
+32.79366 48.69365 lineto
+32.25237 48.87868 31.70512 49.04584 31.15283 49.19487 curveto
+30.57085 49.35191 29.98358 49.48872 29.3921 49.60507 curveto
+28.49547 49.60507 lineto
+28.49547 48.70844 lineto
+29.08694 48.59209 29.67421 48.45528 30.2562 48.29823 curveto
+30.80849 48.1492 31.35573 47.98204 31.89702 47.79701 curveto
+32.79366 47.79701 lineto
+40.73051 61.54408 lineto
+40.73051 62.44072 lineto
+39.01427 63.4316 37.17554 64.1932 35.2613 64.70612 curveto
+33.34714 65.21901 31.374 65.47878 29.39229 65.47878 curveto
+28.49565 65.47878 lineto
+28.49547 65.47878 lineto
+28.49547 64.58214 lineto
+ closepath fill
+ 1 0 0 setrgbcolor
+newpath 28.49547 41.90532 moveto
+29.3921 41.90532 lineto
+29.3921 42.80196 lineto
+29.3921 66.61269 lineto
+28.49547 66.61269 lineto
+28.49547 65.71605 lineto
+ closepath fill
+newpath 28.49547 42.80196 moveto
+28.49547 41.90532 lineto
+29.3921 41.90532 lineto
+41.29747 62.52608 lineto
+41.29747 63.42271 lineto
+40.40083 63.42271 lineto
+ closepath fill
+newpath 38.73325 61.57736 moveto
+40.69724 60.44345 lineto
+41.98297 64.93823 lineto
+ closepath fill
+ 1 setgray
+newpath 12.20424 49.02284 moveto
+23.0065 49.02284 lineto
+23.0065 59.83064 lineto
+12.20424 59.83064 lineto
+ closepath fill
+ 0 setgray
+14.20424 51.02284 moveto
+(U)
+ cmmi10 9.96265 fshow
+ 1 setgray
+newpath 22.71312 26.34602 moveto
+35.17445 26.34602 lineto
+35.17445 37.15382 lineto
+22.71312 37.15382 lineto
+ closepath fill
+ 0 setgray
+24.71312 28.34602 moveto
+(K)
+ cmmi10 9.96265 fshow
+22.02473 0.1594 moveto
+(TC)
+ tex-latin1@Times-Bold 9.96265 fshow
+-11.78348 90.6347 moveto
+(T)
+ tex-latin1@Times-Bold 9.96265 fshow
+-5.87567 90.6347 moveto
+(raditional)
+ tex-latin1@Times-Bold 9.96265 fshow
+38.68723 90.6347 moveto
+(scheme)
+ tex-latin1@Times-Bold 9.96265 fshow
+newpath 68.62822 42.9514 moveto
+68.62822 41.75587 lineto
+69.82375 41.75587 lineto
+103.83897 41.75587 lineto
+103.83897 42.9514 lineto
+102.64345 42.9514 lineto
+ closepath fill
+newpath 98.9478 40.22505 moveto
+100.14333 40.22505 lineto
+103.83897 41.75587 lineto
+103.83897 42.9514 lineto
+100.14333 44.48222 lineto
+98.9478 44.48222 lineto
+98.9478 43.2867 lineto
+ closepath fill
+newpath 98.9478 41.42058 moveto
+100.14333 41.42058 lineto
+100.14333 44.48222 lineto
+98.9478 43.2867 lineto
+102.64345 41.75587 lineto
+102.64345 42.9514 lineto
+ closepath fill
+ 1 0.65 0 setrgbcolor
+newpath 160.97934 42.35364 moveto
+160.97934 48.36816 158.58972 54.13565 154.33713 58.38824 curveto
+150.08453 62.64084 144.31705 65.03046 138.30252 65.03046 curveto
+132.288 65.03046 126.52051 62.64084 122.26791 58.38824 curveto
+118.01532 54.13565 115.6257 48.36816 115.6257 42.35364 curveto
+115.6257 36.33911 118.01532 30.57162 122.26791 26.31903 curveto
+126.52051 22.06644 132.288 19.67682 138.30252 19.67682 curveto
+144.31705 19.67682 150.08453 22.06644 154.33713 26.31903 curveto
+158.58972 30.57162 160.97934 36.33911 160.97934 42.35364 curveto closepath fill
+ 1 setgray
+newpath 145.10556 42.35364 moveto
+145.10556 44.15799 144.38867 45.88823 143.11288 47.164 curveto
+141.83711 48.43979 140.10687 49.15668 138.30252 49.15668 curveto
+136.49817 49.15668 134.76793 48.43979 133.49216 47.164 curveto
+132.21637 45.88823 131.49948 44.15799 131.49948 42.35364 curveto
+131.49948 40.54929 132.21637 38.81905 133.49216 37.54327 curveto
+134.76793 36.26749 136.49817 35.5506 138.30252 35.5506 curveto
+140.10687 35.5506 141.83711 36.26749 143.11288 37.54327 curveto
+144.38867 38.81905 145.10556 40.54929 145.10556 42.35364 curveto closepath fill
+ 0 setgray
+newpath 160.53102 41.90532 moveto
+161.42766 41.90532 lineto
+161.42766 42.80196 lineto
+161.42766 48.81648 159.03804 54.58397 154.78545 58.83656 curveto
+150.53285 63.08916 144.76537 65.47878 138.75084 65.47878 curveto
+137.8542 65.47878 lineto
+131.83968 65.47878 126.07219 63.08916 121.8196 58.83656 curveto
+117.567 54.58397 115.17738 48.81648 115.17738 42.80196 curveto
+115.17738 41.90532 lineto
+115.17738 35.8908 117.567 30.1233 121.8196 25.87071 curveto
+126.07219 21.61812 131.83968 19.2285 137.8542 19.2285 curveto
+138.75084 19.2285 lineto
+144.76537 19.2285 150.53285 21.61812 154.78545 25.87071 curveto
+159.03804 30.1233 161.42766 35.8908 161.42766 41.90532 curveto
+161.42766 42.80196 lineto
+160.53102 42.80196 lineto
+160.53102 36.78743 158.1414 31.01994 153.88881 26.76735 curveto
+149.63622 22.51476 143.86873 20.12514 137.8542 20.12514 curveto
+138.75084 20.12514 lineto
+132.73631 20.12514 126.96883 22.51476 122.71623 26.76735 curveto
+118.46364 31.01994 116.07402 36.78743 116.07402 42.80196 curveto
+116.07402 41.90532 lineto
+116.07402 47.91985 118.46364 53.68733 122.71623 57.93993 curveto
+126.96883 62.19252 132.73631 64.58214 138.75084 64.58214 curveto
+137.8542 64.58214 lineto
+143.86873 64.58214 149.63622 62.19252 153.88881 57.93993 curveto
+158.1414 53.68733 160.53102 47.91985 160.53102 41.90532 curveto closepath fill
+newpath 144.65724 41.90532 moveto
+145.55388 41.90532 lineto
+145.55388 42.80196 lineto
+145.55388 44.60631 144.83699 46.33655 143.5612 47.61232 curveto
+142.28543 48.8881 140.55519 49.605 138.75084 49.605 curveto
+137.8542 49.605 lineto
+136.04985 49.605 134.31961 48.8881 133.04384 47.61232 curveto
+131.76805 46.33655 131.05116 44.60631 131.05116 42.80196 curveto
+131.05116 41.90532 lineto
+131.05116 40.10097 131.76805 38.37073 133.04384 37.09496 curveto
+134.31961 35.81917 136.04985 35.10228 137.8542 35.10228 curveto
+138.75084 35.10228 lineto
+140.55519 35.10228 142.28543 35.81917 143.5612 37.09496 curveto
+144.83699 38.37073 145.55388 40.10097 145.55388 41.90532 curveto
+145.55388 42.80196 lineto
+144.65724 42.80196 lineto
+144.65724 40.9976 143.94035 39.26736 142.66457 37.9916 curveto
+141.3888 36.7158 139.65855 35.99892 137.8542 35.99892 curveto
+138.75084 35.99892 lineto
+136.94649 35.99892 135.21625 36.7158 133.94048 37.9916 curveto
+132.66469 39.26736 131.9478 40.9976 131.9478 42.80196 curveto
+131.9478 41.90532 lineto
+131.9478 43.70967 132.66469 45.43991 133.94048 46.71568 curveto
+135.21625 47.99147 136.94649 48.70836 138.75084 48.70836 curveto
+137.8542 48.70836 lineto
+139.65855 48.70836 141.3888 47.99147 142.66457 46.71568 curveto
+143.94035 45.43991 144.65724 43.70967 144.65724 41.90532 curveto closepath fill
+ 0 1 0 setrgbcolor
+newpath 143.97173 42.35364 moveto
+143.97173 43.85727 143.37431 45.29913 142.31117 46.36229 curveto
+141.24802 47.42543 139.80615 48.02284 138.30252 48.02284 curveto
+136.79889 48.02284 135.35703 47.42543 134.29387 46.36229 curveto
+133.23073 45.29913 132.63332 43.85727 132.63332 42.35364 curveto
+132.63332 40.85 133.23073 39.40814 134.29387 38.34499 curveto
+135.35703 37.28185 136.79889 36.68443 138.30252 36.68443 curveto
+139.80615 36.68443 141.24802 37.28185 142.31117 38.34499 curveto
+143.37431 39.40814 143.97173 40.85 143.97173 42.35364 curveto closepath fill
+ 0 setgray
+newpath 143.37396 41.75587 moveto
+144.56949 41.75587 lineto
+144.56949 42.9514 lineto
+144.56949 44.45503 143.97208 45.8969 142.90894 46.96005 curveto
+141.84578 48.0232 140.40392 48.6206 138.90028 48.6206 curveto
+137.70476 48.6206 lineto
+136.20113 48.6206 134.75926 48.0232 133.6961 46.96005 curveto
+132.63297 45.8969 132.03555 44.45503 132.03555 42.9514 curveto
+132.03555 41.75587 lineto
+132.03555 40.25224 132.63297 38.81038 133.6961 37.74722 curveto
+134.75926 36.68408 136.20113 36.08667 137.70476 36.08667 curveto
+138.90028 36.08667 lineto
+140.40392 36.08667 141.84578 36.68408 142.90894 37.74722 curveto
+143.97208 38.81038 144.56949 40.25224 144.56949 41.75587 curveto
+144.56949 42.9514 lineto
+143.37396 42.9514 lineto
+143.37396 41.44777 142.77655 40.0059 141.71341 38.94275 curveto
+140.65025 37.87961 139.20839 37.2822 137.70476 37.2822 curveto
+138.90028 37.2822 lineto
+137.39665 37.2822 135.95479 37.87961 134.89163 38.94275 curveto
+133.82849 40.0059 133.23108 41.44777 133.23108 42.9514 curveto
+133.23108 41.75587 lineto
+133.23108 43.2595 133.82849 44.70137 134.89163 45.76453 curveto
+135.95479 46.82767 137.39665 47.42508 138.90028 47.42508 curveto
+137.70476 47.42508 lineto
+139.20839 47.42508 140.65025 46.82767 141.71341 45.76453 curveto
+142.77655 44.70137 143.37396 43.2595 143.37396 41.75587 curveto closepath fill
+130.83054 0.1594 moveto
+(KC)
+ tex-latin1@Times-Bold 9.96265 fshow
+ 0 1 1 setrgbcolor
+newpath 218.56802 42.35364 moveto
+218.56802 48.36816 216.1784 54.13565 211.92581 58.38824 curveto
+207.67322 62.64084 201.90573 65.03046 195.8912 65.03046 curveto
+189.87668 65.03046 184.10919 62.64084 179.8566 58.38824 curveto
+175.604 54.13565 173.21439 48.36816 173.21439 42.35364 curveto
+173.21439 36.33911 175.604 30.57162 179.8566 26.31903 curveto
+184.10919 22.06644 189.87668 19.67682 195.8912 19.67682 curveto
+201.90573 19.67682 207.67322 22.06644 211.92581 26.31903 curveto
+216.1784 30.57162 218.56802 36.33911 218.56802 42.35364 curveto closepath fill
+ 1 setgray
+newpath 202.69424 42.35364 moveto
+202.69424 44.15799 201.97736 45.88823 200.70157 47.164 curveto
+199.4258 48.43979 197.69556 49.15668 195.8912 49.15668 curveto
+194.08685 49.15668 192.35661 48.43979 191.08084 47.164 curveto
+189.80505 45.88823 189.08817 44.15799 189.08817 42.35364 curveto
+189.08817 40.54929 189.80505 38.81905 191.08084 37.54327 curveto
+192.35661 36.26749 194.08685 35.5506 195.8912 35.5506 curveto
+197.69556 35.5506 199.4258 36.26749 200.70157 37.54327 curveto
+201.97736 38.81905 202.69424 40.54929 202.69424 42.35364 curveto closepath fill
+ 0 setgray
+newpath 218.1197 41.90532 moveto
+219.01634 41.90532 lineto
+219.01634 42.80196 lineto
+219.01634 48.81648 216.62672 54.58397 212.37413 58.83656 curveto
+208.12154 63.08916 202.35405 65.47878 196.33952 65.47878 curveto
+195.44289 65.47878 lineto
+189.42836 65.47878 183.66087 63.08916 179.40828 58.83656 curveto
+175.15569 54.58397 172.76607 48.81648 172.76607 42.80196 curveto
+172.76607 41.90532 lineto
+172.76607 35.8908 175.15569 30.1233 179.40828 25.87071 curveto
+183.66087 21.61812 189.42836 19.2285 195.44289 19.2285 curveto
+196.33952 19.2285 lineto
+202.35405 19.2285 208.12154 21.61812 212.37413 25.87071 curveto
+216.62672 30.1233 219.01634 35.8908 219.01634 41.90532 curveto
+219.01634 42.80196 lineto
+218.1197 42.80196 lineto
+218.1197 36.78743 215.73009 31.01994 211.4775 26.76735 curveto
+207.2249 22.51476 201.45741 20.12514 195.44289 20.12514 curveto
+196.33952 20.12514 lineto
+190.325 20.12514 184.55751 22.51476 180.30492 26.76735 curveto
+176.05232 31.01994 173.6627 36.78743 173.6627 42.80196 curveto
+173.6627 41.90532 lineto
+173.6627 47.91985 176.05232 53.68733 180.30492 57.93993 curveto
+184.55751 62.19252 190.325 64.58214 196.33952 64.58214 curveto
+195.44289 64.58214 lineto
+201.45741 64.58214 207.2249 62.19252 211.4775 57.93993 curveto
+215.73009 53.68733 218.1197 47.91985 218.1197 41.90532 curveto closepath fill
+newpath 202.24593 41.90532 moveto
+203.14256 41.90532 lineto
+203.14256 42.80196 lineto
+203.14256 44.60631 202.42567 46.33655 201.14989 47.61232 curveto
+199.87411 48.8881 198.14388 49.605 196.33952 49.605 curveto
+195.44289 49.605 lineto
+193.63853 49.605 191.9083 48.8881 190.63252 47.61232 curveto
+189.35674 46.33655 188.63985 44.60631 188.63985 42.80196 curveto
+188.63985 41.90532 lineto
+188.63985 40.10097 189.35674 38.37073 190.63252 37.09496 curveto
+191.9083 35.81917 193.63853 35.10228 195.44289 35.10228 curveto
+196.33952 35.10228 lineto
+198.14388 35.10228 199.87411 35.81917 201.14989 37.09496 curveto
+202.42567 38.37073 203.14256 40.10097 203.14256 41.90532 curveto
+203.14256 42.80196 lineto
+202.24593 42.80196 lineto
+202.24593 40.9976 201.52904 39.26736 200.25325 37.9916 curveto
+198.97748 36.7158 197.24724 35.99892 195.44289 35.99892 curveto
+196.33952 35.99892 lineto
+194.53517 35.99892 192.80493 36.7158 191.52916 37.9916 curveto
+190.25337 39.26736 189.53648 40.9976 189.53648 42.80196 curveto
+189.53648 41.90532 lineto
+189.53648 43.70967 190.25337 45.43991 191.52916 46.71568 curveto
+192.80493 47.99147 194.53517 48.70836 196.33952 48.70836 curveto
+195.44289 48.70836 lineto
+197.24724 48.70836 198.97748 47.99147 200.25325 46.71568 curveto
+201.52904 45.43991 202.24593 43.70967 202.24593 41.90532 curveto closepath fill
+ 1 0 0 setrgbcolor
+newpath 201.56041 42.35364 moveto
+201.56041 43.85727 200.963 45.29913 199.89986 46.36229 curveto
+198.8367 47.42543 197.39484 48.02284 195.8912 48.02284 curveto
+194.38757 48.02284 192.94571 47.42543 191.88255 46.36229 curveto
+190.81941 45.29913 190.222 43.85727 190.222 42.35364 curveto
+190.222 40.85 190.81941 39.40814 191.88255 38.34499 curveto
+192.94571 37.28185 194.38757 36.68443 195.8912 36.68443 curveto
+197.39484 36.68443 198.8367 37.28185 199.89986 38.34499 curveto
+200.963 39.40814 201.56041 40.85 201.56041 42.35364 curveto closepath fill
+ 0 setgray
+newpath 200.96265 41.75587 moveto
+202.15817 41.75587 lineto
+202.15817 42.9514 lineto
+202.15817 44.45503 201.56076 45.8969 200.49762 46.96005 curveto
+199.43446 48.0232 197.9926 48.6206 196.48897 48.6206 curveto
+195.29344 48.6206 lineto
+193.78981 48.6206 192.34795 48.0232 191.28479 46.96005 curveto
+190.22165 45.8969 189.62424 44.45503 189.62424 42.9514 curveto
+189.62424 41.75587 lineto
+189.62424 40.25224 190.22165 38.81038 191.28479 37.74722 curveto
+192.34795 36.68408 193.78981 36.08667 195.29344 36.08667 curveto
+196.48897 36.08667 lineto
+197.9926 36.08667 199.43446 36.68408 200.49762 37.74722 curveto
+201.56076 38.81038 202.15817 40.25224 202.15817 41.75587 curveto
+202.15817 42.9514 lineto
+200.96265 42.9514 lineto
+200.96265 41.44777 200.36523 40.0059 199.3021 38.94275 curveto
+198.23894 37.87961 196.79707 37.2822 195.29344 37.2822 curveto
+196.48897 37.2822 lineto
+194.98534 37.2822 193.54347 37.87961 192.48032 38.94275 curveto
+191.41718 40.0059 190.81976 41.44777 190.81976 42.9514 curveto
+190.81976 41.75587 lineto
+190.81976 43.2595 191.41718 44.70137 192.48032 45.76453 curveto
+193.54347 46.82767 194.98534 47.42508 196.48897 47.42508 curveto
+195.29344 47.42508 lineto
+196.79707 47.42508 198.23894 46.82767 199.3021 45.76453 curveto
+200.36523 44.70137 200.96265 43.2595 200.96265 41.75587 curveto closepath fill
+185.37563 0.1594 moveto
+(A)
+ tex-latin1@Times-Bold 9.96265 fshow
+192.02072 0.1594 moveto
+(CV)
+ tex-latin1@Times-Bold 9.96265 fshow
+ 0 1 1 setrgbcolor
+newpath 276.15671 42.35364 moveto
+276.15671 48.36816 273.76709 54.13565 269.5145 58.38824 curveto
+265.2619 62.64084 259.49442 65.03046 253.47989 65.03046 curveto
+247.46536 65.03046 241.69788 62.64084 237.44528 58.38824 curveto
+233.19269 54.13565 230.80307 48.36816 230.80307 42.35364 curveto
+230.80307 36.33911 233.19269 30.57162 237.44528 26.31903 curveto
+241.69788 22.06644 247.46536 19.67682 253.47989 19.67682 curveto
+259.49442 19.67682 265.2619 22.06644 269.5145 26.31903 curveto
+273.76709 30.57162 276.15671 36.33911 276.15671 42.35364 curveto closepath fill
+ 1 setgray
+newpath 260.28293 42.35364 moveto
+260.28293 44.15799 259.56604 45.88823 258.29025 47.164 curveto
+257.01448 48.43979 255.28424 49.15668 253.47989 49.15668 curveto
+251.67554 49.15668 249.9453 48.43979 248.66953 47.164 curveto
+247.39374 45.88823 246.67685 44.15799 246.67685 42.35364 curveto
+246.67685 40.54929 247.39374 38.81905 248.66953 37.54327 curveto
+249.9453 36.26749 251.67554 35.5506 253.47989 35.5506 curveto
+255.28424 35.5506 257.01448 36.26749 258.29025 37.54327 curveto
+259.56604 38.81905 260.28293 40.54929 260.28293 42.35364 curveto closepath fill
+ 0 setgray
+newpath 275.70839 41.90532 moveto
+276.60503 41.90532 lineto
+276.60503 42.80196 lineto
+276.60503 48.81648 274.21541 54.58397 269.96281 58.83656 curveto
+265.71022 63.08916 259.94273 65.47878 253.9282 65.47878 curveto
+253.03157 65.47878 lineto
+247.01704 65.47878 241.24956 63.08916 236.99696 58.83656 curveto
+232.74437 54.58397 230.35475 48.81648 230.35475 42.80196 curveto
+230.35475 41.90532 lineto
+230.35475 35.8908 232.74437 30.1233 236.99696 25.87071 curveto
+241.24956 21.61812 247.01704 19.2285 253.03157 19.2285 curveto
+253.9282 19.2285 lineto
+259.94273 19.2285 265.71022 21.61812 269.96281 25.87071 curveto
+274.21541 30.1233 276.60503 35.8908 276.60503 41.90532 curveto
+276.60503 42.80196 lineto
+275.70839 42.80196 lineto
+275.70839 36.78743 273.31877 31.01994 269.06618 26.76735 curveto
+264.81358 22.51476 259.0461 20.12514 253.03157 20.12514 curveto
+253.9282 20.12514 lineto
+247.91368 20.12514 242.1462 22.51476 237.8936 26.76735 curveto
+233.641 31.01994 231.25139 36.78743 231.25139 42.80196 curveto
+231.25139 41.90532 lineto
+231.25139 47.91985 233.641 53.68733 237.8936 57.93993 curveto
+242.1462 62.19252 247.91368 64.58214 253.9282 64.58214 curveto
+253.03157 64.58214 lineto
+259.0461 64.58214 264.81358 62.19252 269.06618 57.93993 curveto
+273.31877 53.68733 275.70839 47.91985 275.70839 41.90532 curveto closepath fill
+newpath 259.83461 41.90532 moveto
+260.73125 41.90532 lineto
+260.73125 42.80196 lineto
+260.73125 44.60631 260.01436 46.33655 258.73857 47.61232 curveto
+257.4628 48.8881 255.73256 49.605 253.9282 49.605 curveto
+253.03157 49.605 lineto
+251.22722 49.605 249.49698 48.8881 248.2212 47.61232 curveto
+246.94542 46.33655 246.22853 44.60631 246.22853 42.80196 curveto
+246.22853 41.90532 lineto
+246.22853 40.10097 246.94542 38.37073 248.2212 37.09496 curveto
+249.49698 35.81917 251.22722 35.10228 253.03157 35.10228 curveto
+253.9282 35.10228 lineto
+255.73256 35.10228 257.4628 35.81917 258.73857 37.09496 curveto
+260.01436 38.37073 260.73125 40.10097 260.73125 41.90532 curveto
+260.73125 42.80196 lineto
+259.83461 42.80196 lineto
+259.83461 40.9976 259.11772 39.26736 257.84193 37.9916 curveto
+256.56616 36.7158 254.83592 35.99892 253.03157 35.99892 curveto
+253.9282 35.99892 lineto
+252.12386 35.99892 250.39362 36.7158 249.11784 37.9916 curveto
+247.84206 39.26736 247.12517 40.9976 247.12517 42.80196 curveto
+247.12517 41.90532 lineto
+247.12517 43.70967 247.84206 45.43991 249.11784 46.71568 curveto
+250.39362 47.99147 252.12386 48.70836 253.9282 48.70836 curveto
+253.03157 48.70836 lineto
+254.83592 48.70836 256.56616 47.99147 257.84193 46.71568 curveto
+259.11772 45.43991 259.83461 43.70967 259.83461 41.90532 curveto closepath fill
+ 0 0 1 setrgbcolor
+newpath 259.1491 42.35364 moveto
+259.1491 43.85727 258.55168 45.29913 257.48854 46.36229 curveto
+256.42538 47.42543 254.98352 48.02284 253.47989 48.02284 curveto
+251.97626 48.02284 250.5344 47.42543 249.47124 46.36229 curveto
+248.4081 45.29913 247.81068 43.85727 247.81068 42.35364 curveto
+247.81068 40.85 248.4081 39.40814 249.47124 38.34499 curveto
+250.5344 37.28185 251.97626 36.68443 253.47989 36.68443 curveto
+254.98352 36.68443 256.42538 37.28185 257.48854 38.34499 curveto
+258.55168 39.40814 259.1491 40.85 259.1491 42.35364 curveto closepath fill
+ 0 setgray
+newpath 258.55133 41.75587 moveto
+259.74686 41.75587 lineto
+259.74686 42.9514 lineto
+259.74686 44.45503 259.14944 45.8969 258.0863 46.96005 curveto
+257.02315 48.0232 255.58128 48.6206 254.07765 48.6206 curveto
+252.88213 48.6206 lineto
+251.3785 48.6206 249.93663 48.0232 248.87347 46.96005 curveto
+247.81033 45.8969 247.21292 44.45503 247.21292 42.9514 curveto
+247.21292 41.75587 lineto
+247.21292 40.25224 247.81033 38.81038 248.87347 37.74722 curveto
+249.93663 36.68408 251.3785 36.08667 252.88213 36.08667 curveto
+254.07765 36.08667 lineto
+255.58128 36.08667 257.02315 36.68408 258.0863 37.74722 curveto
+259.14944 38.81038 259.74686 40.25224 259.74686 41.75587 curveto
+259.74686 42.9514 lineto
+258.55133 42.9514 lineto
+258.55133 41.44777 257.95392 40.0059 256.89078 38.94275 curveto
+255.82762 37.87961 254.38576 37.2822 252.88213 37.2822 curveto
+254.07765 37.2822 lineto
+252.57402 37.2822 251.13216 37.87961 250.069 38.94275 curveto
+249.00586 40.0059 248.40845 41.44777 248.40845 42.9514 curveto
+248.40845 41.75587 lineto
+248.40845 43.2595 249.00586 44.70137 250.069 45.76453 curveto
+251.13216 46.82767 252.57402 47.42508 254.07765 47.42508 curveto
+252.88213 47.42508 lineto
+254.38576 47.42508 255.82762 46.82767 256.89078 45.76453 curveto
+257.95392 44.70137 258.55133 43.2595 258.55133 41.75587 curveto closepath fill
+243.79121 0.1594 moveto
+(A)
+ tex-latin1@Times-Bold 9.96265 fshow
+250.43631 0.1594 moveto
+(CS)
+ tex-latin1@Times-Bold 9.96265 fshow
+ 0 1 1 setrgbcolor
+newpath 290.78922 43.48755 moveto
+291.25742 55.51852 301.14671 65.03046 313.1868 65.03046 curveto
+325.22688 65.03046 335.11618 55.51852 335.58438 43.48755 curveto
+319.90614 43.48755 lineto
+319.34697 46.76212 316.50876 49.15675 313.1868 49.15675 curveto
+309.86484 49.15675 307.02663 46.76212 306.46745 43.48755 curveto
+ closepath fill
+ 0 setgray
+newpath 290.3409 43.93587 moveto
+290.3409 43.03923 lineto
+291.23753 43.03923 lineto
+291.70573 55.0702 301.59503 64.58214 313.63512 64.58214 curveto
+312.73848 64.58214 lineto
+324.77856 64.58214 334.66786 55.0702 335.13606 43.03923 curveto
+335.13606 43.93587 lineto
+319.45782 43.93587 lineto
+320.35446 43.93587 lineto
+319.79529 47.21043 316.95708 49.60507 313.63512 49.60507 curveto
+312.73848 49.60507 lineto
+309.41652 49.60507 306.57831 47.21043 306.01913 43.93587 curveto
+290.3409 43.93587 lineto
+290.3409 43.03923 lineto
+291.23753 43.03923 lineto
+306.91577 43.03923 lineto
+307.47495 46.3138 310.31316 48.70844 313.63512 48.70844 curveto
+312.73848 48.70844 lineto
+316.06044 48.70844 318.89865 46.3138 319.45782 43.03923 curveto
+320.35446 43.03923 lineto
+336.0327 43.03923 lineto
+336.0327 43.93587 lineto
+335.5645 55.96684 325.6752 65.47878 313.63512 65.47878 curveto
+312.73848 65.47878 lineto
+300.6984 65.47878 290.8091 55.96684 290.3409 43.93587 curveto closepath fill
+ 1 0.65 0 setrgbcolor
+newpath 335.58438 41.21973 moveto
+335.11618 29.18875 325.22688 19.67682 313.1868 19.67682 curveto
+301.14671 19.67682 291.25742 29.18875 290.78922 41.21973 curveto
+306.46745 41.21973 lineto
+307.02663 37.94516 309.86484 35.55052 313.1868 35.55052 curveto
+316.50876 35.55052 319.34697 37.94516 319.90614 41.21973 curveto
+ closepath fill
+ 0 setgray
+newpath 336.0327 40.77141 moveto
+336.0327 41.66805 lineto
+335.13606 41.66805 lineto
+334.66786 29.63707 324.77856 20.12514 312.73848 20.12514 curveto
+313.63512 20.12514 lineto
+301.59503 20.12514 291.70573 29.63707 291.23753 41.66805 curveto
+291.23753 40.77141 lineto
+306.91577 40.77141 lineto
+306.01913 40.77141 lineto
+306.57831 37.49684 309.41652 35.1022 312.73848 35.1022 curveto
+313.63512 35.1022 lineto
+316.95708 35.1022 319.79529 37.49684 320.35446 40.77141 curveto
+336.0327 40.77141 lineto
+336.0327 41.66805 lineto
+335.13606 41.66805 lineto
+319.45782 41.66805 lineto
+318.89865 38.39348 316.06044 35.99884 312.73848 35.99884 curveto
+313.63512 35.99884 lineto
+310.31316 35.99884 307.47495 38.39348 306.91577 41.66805 curveto
+306.01913 41.66805 lineto
+290.3409 41.66805 lineto
+290.3409 40.77141 lineto
+290.8091 28.74043 300.6984 19.2285 312.73848 19.2285 curveto
+313.63512 19.2285 lineto
+325.6752 19.2285 335.5645 28.74043 336.0327 40.77141 curveto closepath fill
+ 0.5 setgray
+newpath 318.856 42.35364 moveto
+318.856 43.85727 318.25859 45.29913 317.19545 46.36229 curveto
+316.1323 47.42543 314.69043 48.02284 313.1868 48.02284 curveto
+311.68317 48.02284 310.2413 47.42543 309.17815 46.36229 curveto
+308.115 45.29913 307.5176 43.85727 307.5176 42.35364 curveto
+307.5176 40.85 308.115 39.40814 309.17815 38.34499 curveto
+310.2413 37.28185 311.68317 36.68443 313.1868 36.68443 curveto
+314.69043 36.68443 316.1323 37.28185 317.19545 38.34499 curveto
+318.25859 39.40814 318.856 40.85 318.856 42.35364 curveto closepath fill
+ 0 setgray
+newpath 318.25824 41.75587 moveto
+319.45377 41.75587 lineto
+319.45377 42.9514 lineto
+319.45377 44.45503 318.85635 45.8969 317.79321 46.96005 curveto
+316.73006 48.0232 315.2882 48.6206 313.78456 48.6206 curveto
+312.58904 48.6206 lineto
+311.0854 48.6206 309.64354 48.0232 308.58038 46.96005 curveto
+307.51724 45.8969 306.91983 44.45503 306.91983 42.9514 curveto
+306.91983 41.75587 lineto
+306.91983 40.25224 307.51724 38.81038 308.58038 37.74722 curveto
+309.64354 36.68408 311.0854 36.08667 312.58904 36.08667 curveto
+313.78456 36.08667 lineto
+315.2882 36.08667 316.73006 36.68408 317.79321 37.74722 curveto
+318.85635 38.81038 319.45377 40.25224 319.45377 41.75587 curveto
+319.45377 42.9514 lineto
+318.25824 42.9514 lineto
+318.25824 41.44777 317.66083 40.0059 316.59769 38.94275 curveto
+315.53453 37.87961 314.09267 37.2822 312.58904 37.2822 curveto
+313.78456 37.2822 lineto
+312.28093 37.2822 310.83907 37.87961 309.77591 38.94275 curveto
+308.71277 40.0059 308.11536 41.44777 308.11536 42.9514 curveto
+308.11536 41.75587 lineto
+308.11536 43.2595 308.71277 44.70137 309.77591 45.76453 curveto
+310.83907 46.82767 312.28093 47.42508 313.78456 47.42508 curveto
+312.58904 47.42508 lineto
+314.09267 47.42508 315.53453 46.82767 316.59769 45.76453 curveto
+317.66083 44.70137 318.25824 43.2595 318.25824 41.75587 curveto closepath fill
+newpath 290.44014 51.60075 moveto
+290.44014 52.19853 lineto
+289.84236 52.19853 lineto
+288.5887 49.17209 287.94344 45.92834 287.94344 42.65253 curveto
+287.94344 42.05475 lineto
+287.94344 38.77893 288.5887 35.53519 289.84236 32.50874 curveto
+290.44014 32.50874 lineto
+290.44014 33.10652 lineto
+289.18648 36.13297 288.54121 39.37671 288.54121 42.65253 curveto
+288.54121 42.05475 lineto
+288.54121 45.33057 289.18648 48.57431 290.44014 51.60075 curveto closepath fill
+newpath 291.18884 33.24156 moveto
+291.443 29.66502 lineto
+289.09366 32.3737 lineto
+ closepath fill
+newpath 335.93346 33.10652 moveto
+335.93346 32.50874 lineto
+336.53123 32.50874 lineto
+337.7849 35.53519 338.43016 38.77893 338.43016 42.05475 curveto
+338.43016 42.65253 lineto
+338.43016 45.92834 337.7849 49.17209 336.53123 52.19853 curveto
+335.93346 52.19853 lineto
+335.93346 51.60075 lineto
+337.18712 48.57431 337.83238 45.33057 337.83238 42.05475 curveto
+337.83238 42.65253 lineto
+337.83238 39.37671 337.18712 36.13297 335.93346 33.10652 curveto closepath fill
+newpath 335.18475 51.46571 moveto
+334.9306 55.04225 lineto
+337.27994 52.33357 lineto
+ closepath fill
+305.99377 0.1594 moveto
+(XC)
+ tex-latin1@Times-Bold 9.96265 fshow
+newpath 406.46062 41.75587 moveto
+407.65614 41.75587 lineto
+407.65614 42.9514 lineto
+407.65614 50.46957 404.66911 57.67891 399.35338 62.99466 curveto
+394.03763 68.3104 386.8283 71.29742 379.31012 71.29742 curveto
+378.1146 71.29742 lineto
+370.59642 71.29742 363.38708 68.3104 358.07133 62.99466 curveto
+352.7556 57.67891 349.76857 50.46957 349.76857 42.9514 curveto
+349.76857 41.75587 lineto
+349.76857 34.2377 352.7556 27.02837 358.07133 21.71262 curveto
+363.38708 16.39688 370.59642 13.40985 378.1146 13.40985 curveto
+379.31012 13.40985 lineto
+386.8283 13.40985 394.03763 16.39688 399.35338 21.71262 curveto
+404.66911 27.02837 407.65614 34.2377 407.65614 41.75587 curveto
+407.65614 42.9514 lineto
+406.46062 42.9514 lineto
+406.46062 35.43323 403.47359 28.22389 398.15785 22.90814 curveto
+392.8421 17.5924 385.63277 14.60538 378.1146 14.60538 curveto
+379.31012 14.60538 lineto
+371.79195 14.60538 364.58261 17.5924 359.26686 22.90814 curveto
+353.95113 28.22389 350.9641 35.43323 350.9641 42.9514 curveto
+350.9641 41.75587 lineto
+350.9641 49.27405 353.95113 56.48338 359.26686 61.79913 curveto
+364.58261 67.11487 371.79195 70.1019 379.31012 70.1019 curveto
+378.1146 70.1019 lineto
+385.63277 70.1019 392.8421 67.11487 398.15785 61.79913 curveto
+403.47359 56.48338 406.46062 49.27405 406.46062 41.75587 curveto closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+407.35727 42.05475 lineto
+407.35727 42.65253 lineto
+406.75949 42.65253 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+407.20207 45.01755 lineto
+407.20207 45.61533 lineto
+406.6043 45.61533 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+406.73788 47.94835 lineto
+406.73788 48.54613 lineto
+406.1401 48.54613 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+405.96973 50.81427 lineto
+405.96973 51.41205 lineto
+405.37195 51.41205 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+404.90657 53.58417 lineto
+404.90657 54.18195 lineto
+404.30879 54.18195 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+403.5597 56.22777 lineto
+403.5597 56.82555 lineto
+402.96191 56.82555 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+401.94377 58.71617 lineto
+401.94377 59.31395 lineto
+401.346 59.31395 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+400.07664 61.02188 lineto
+400.07664 61.61966 lineto
+399.47887 61.61966 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+397.97838 63.12015 lineto
+397.97838 63.71793 lineto
+397.3806 63.71793 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+395.67267 64.98727 lineto
+395.67267 65.58505 lineto
+395.07489 65.58505 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+393.18427 66.6032 lineto
+393.18427 67.20097 lineto
+392.58649 67.20097 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+390.54066 67.95007 lineto
+390.54066 68.54785 lineto
+389.94289 68.54785 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+387.77077 69.01323 lineto
+387.77077 69.61101 lineto
+387.17299 69.61101 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+384.90485 69.78139 lineto
+384.90485 70.37917 lineto
+384.30707 70.37917 lineto
+ closepath fill
+newpath 378.41347 42.65253 moveto
+378.41347 42.05475 lineto
+379.01125 42.05475 lineto
+381.97404 70.24557 lineto
+381.97404 70.84335 lineto
+381.37627 70.84335 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+379.01125 70.99855 lineto
+378.41347 70.99855 lineto
+378.41347 70.40077 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+376.04845 70.84335 lineto
+375.45067 70.84335 lineto
+375.45067 70.24557 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+373.11765 70.37917 lineto
+372.51987 70.37917 lineto
+372.51987 69.78139 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+370.25172 69.61101 lineto
+369.65395 69.61101 lineto
+369.65395 69.01323 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+367.48183 68.54785 lineto
+366.88405 68.54785 lineto
+366.88405 67.95007 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+364.83823 67.20097 lineto
+364.24045 67.20097 lineto
+364.24045 66.6032 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+362.34982 65.58505 lineto
+361.75204 65.58505 lineto
+361.75204 64.98727 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+360.04411 63.71793 lineto
+359.44633 63.71793 lineto
+359.44633 63.12015 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+357.94585 61.61966 lineto
+357.34807 61.61966 lineto
+357.34807 61.02188 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+356.07872 59.31395 lineto
+355.48094 59.31395 lineto
+355.48094 58.71617 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+354.4628 56.82555 lineto
+353.86502 56.82555 lineto
+353.86502 56.22777 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+353.11592 54.18195 lineto
+352.51814 54.18195 lineto
+352.51814 53.58417 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+352.05276 51.41205 lineto
+351.45499 51.41205 lineto
+351.45499 50.81427 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+351.2846 48.54613 lineto
+350.68683 48.54613 lineto
+350.68683 47.94835 lineto
+ closepath fill
+newpath 378.41347 42.05475 moveto
+379.01125 42.05475 lineto
+379.01125 42.65253 lineto
+350.82042 45.61533 lineto
+350.22264 45.61533 lineto
+350.22264 45.01755 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+350.06744 42.65253 lineto
+350.06744 42.05475 lineto
+350.66522 42.05475 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+350.22264 39.68973 lineto
+350.22264 39.09195 lineto
+350.82042 39.09195 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+350.68683 36.75893 lineto
+350.68683 36.16115 lineto
+351.2846 36.16115 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+351.45499 33.893 lineto
+351.45499 33.29523 lineto
+352.05276 33.29523 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+352.51814 31.12311 lineto
+352.51814 30.52533 lineto
+353.11592 30.52533 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+353.86502 28.4795 lineto
+353.86502 27.88173 lineto
+354.4628 27.88173 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+355.48094 25.9911 lineto
+355.48094 25.39333 lineto
+356.07872 25.39333 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+357.34807 23.6854 lineto
+357.34807 23.08762 lineto
+357.94585 23.08762 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+359.44633 21.58713 lineto
+359.44633 20.98935 lineto
+360.04411 20.98935 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+361.75204 19.72 lineto
+361.75204 19.12222 lineto
+362.34982 19.12222 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+364.24045 18.10408 lineto
+364.24045 17.5063 lineto
+364.83823 17.5063 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+366.88405 16.7572 lineto
+366.88405 16.15942 lineto
+367.48183 16.15942 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+369.65395 15.69405 lineto
+369.65395 15.09627 lineto
+370.25172 15.09627 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+372.51987 14.92589 lineto
+372.51987 14.32811 lineto
+373.11765 14.32811 lineto
+ closepath fill
+newpath 379.01125 42.05475 moveto
+379.01125 42.65253 lineto
+378.41347 42.65253 lineto
+375.45067 14.4617 lineto
+375.45067 13.86392 lineto
+376.04845 13.86392 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+378.41347 13.70872 lineto
+379.01125 13.70872 lineto
+379.01125 14.3065 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+381.37627 13.86392 lineto
+381.97404 13.86392 lineto
+381.97404 14.4617 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+384.30707 14.32811 lineto
+384.90485 14.32811 lineto
+384.90485 14.92589 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+387.17299 15.09627 lineto
+387.77077 15.09627 lineto
+387.77077 15.69405 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+389.94289 16.15942 lineto
+390.54066 16.15942 lineto
+390.54066 16.7572 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+392.58649 17.5063 lineto
+393.18427 17.5063 lineto
+393.18427 18.10408 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+395.07489 19.12222 lineto
+395.67267 19.12222 lineto
+395.67267 19.72 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+397.3806 20.98935 lineto
+397.97838 20.98935 lineto
+397.97838 21.58713 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+399.47887 23.08762 lineto
+400.07664 23.08762 lineto
+400.07664 23.6854 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+401.346 25.39333 lineto
+401.94377 25.39333 lineto
+401.94377 25.9911 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+402.96191 27.88173 lineto
+403.5597 27.88173 lineto
+403.5597 28.4795 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+404.30879 30.52533 lineto
+404.90657 30.52533 lineto
+404.90657 31.12311 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+405.37195 33.29523 lineto
+405.96973 33.29523 lineto
+405.96973 33.893 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+406.1401 36.16115 lineto
+406.73788 36.16115 lineto
+406.73788 36.75893 lineto
+ closepath fill
+newpath 379.01125 42.65253 moveto
+378.41347 42.65253 lineto
+378.41347 42.05475 lineto
+406.6043 39.09195 lineto
+407.20207 39.09195 lineto
+407.20207 39.68973 lineto
+ closepath fill
+ 1 setgray
+newpath 405.6565 42.05475 moveto
+405.6565 42.65253 lineto
+405.6565 49.7196 402.8487 56.49638 397.8519 61.49318 curveto
+392.8551 66.48997 386.07832 69.29778 379.01125 69.29778 curveto
+378.41347 69.29778 lineto
+371.34639 69.29778 364.56961 66.48997 359.57281 61.49318 curveto
+354.57602 56.49638 351.76822 49.7196 351.76822 42.65253 curveto
+351.76822 42.05475 lineto
+351.76822 34.98767 354.57602 28.21089 359.57281 23.2141 curveto
+364.56961 18.2173 371.34639 15.4095 378.41347 15.4095 curveto
+379.01125 15.4095 lineto
+386.07832 15.4095 392.8551 18.2173 397.8519 23.2141 curveto
+402.8487 28.21089 405.6565 34.98767 405.6565 42.05475 curveto closepath fill
+newpath 405.05872 42.05475 moveto
+405.6565 42.05475 lineto
+405.6565 42.65253 lineto
+405.05872 42.65253 lineto
+405.05872 35.58545 402.25092 28.80867 397.25412 23.81187 curveto
+392.25732 18.81508 385.48055 16.00728 378.41347 16.00728 curveto
+379.01125 16.00728 lineto
+371.94417 16.00728 365.16739 18.81508 360.1706 23.81187 curveto
+355.1738 28.80867 352.366 35.58545 352.366 42.65253 curveto
+352.366 42.05475 lineto
+352.366 49.12183 355.1738 55.8986 360.1706 60.8954 curveto
+365.16739 65.8922 371.94417 68.7 379.01125 68.7 curveto
+378.41347 68.7 lineto
+385.48055 68.7 392.25732 65.8922 397.25412 60.8954 curveto
+402.25092 55.8986 405.05872 49.12183 405.05872 42.05475 curveto closepath fill
+ 0 setgray
+newpath 378.1146 42.9514 moveto
+378.1146 41.75587 lineto
+379.31012 41.75587 lineto
+407.65614 41.75587 lineto
+407.65614 42.9514 lineto
+406.46062 42.9514 lineto
+ closepath fill
+newpath 378.1146 42.9514 moveto
+378.1146 41.75587 lineto
+379.31012 41.75587 lineto
+403.85857 55.9289 lineto
+403.85857 57.12442 lineto
+402.66304 57.12442 lineto
+ closepath fill
+newpath 378.1146 42.9514 moveto
+378.1146 41.75587 lineto
+379.31012 41.75587 lineto
+393.48314 66.30432 lineto
+393.48314 67.49985 lineto
+392.28761 67.49985 lineto
+ closepath fill
+newpath 378.1146 41.75587 moveto
+379.31012 41.75587 lineto
+379.31012 42.9514 lineto
+379.31012 71.29742 lineto
+378.1146 71.29742 lineto
+378.1146 70.1019 lineto
+ closepath fill
+newpath 378.1146 41.75587 moveto
+379.31012 41.75587 lineto
+379.31012 42.9514 lineto
+365.1371 67.49985 lineto
+363.94157 67.49985 lineto
+363.94157 66.30432 lineto
+ closepath fill
+newpath 378.1146 41.75587 moveto
+379.31012 41.75587 lineto
+379.31012 42.9514 lineto
+354.76167 57.12442 lineto
+353.56615 57.12442 lineto
+353.56615 55.9289 lineto
+ closepath fill
+newpath 379.31012 41.75587 moveto
+379.31012 42.9514 lineto
+378.1146 42.9514 lineto
+349.76857 42.9514 lineto
+349.76857 41.75587 lineto
+350.9641 41.75587 lineto
+ closepath fill
+newpath 379.31012 41.75587 moveto
+379.31012 42.9514 lineto
+378.1146 42.9514 lineto
+353.56615 28.77838 lineto
+353.56615 27.58286 lineto
+354.76167 27.58286 lineto
+ closepath fill
+newpath 379.31012 41.75587 moveto
+379.31012 42.9514 lineto
+378.1146 42.9514 lineto
+363.94157 18.40295 lineto
+363.94157 17.20743 lineto
+365.1371 17.20743 lineto
+ closepath fill
+newpath 379.31012 42.9514 moveto
+378.1146 42.9514 lineto
+378.1146 41.75587 lineto
+378.1146 13.40985 lineto
+379.31012 13.40985 lineto
+379.31012 14.60538 lineto
+ closepath fill
+newpath 379.31012 42.9514 moveto
+378.1146 42.9514 lineto
+378.1146 41.75587 lineto
+392.28761 17.20743 lineto
+393.48314 17.20743 lineto
+393.48314 18.40295 lineto
+ closepath fill
+newpath 379.31012 42.9514 moveto
+378.1146 42.9514 lineto
+378.1146 41.75587 lineto
+402.66304 27.58286 lineto
+403.85857 27.58286 lineto
+403.85857 28.77838 lineto
+ closepath fill
+ 1 setgray
+newpath 404.52267 42.05475 moveto
+404.52267 42.65253 lineto
+404.52267 49.41888 401.83435 55.90729 397.05017 60.69145 curveto
+392.266 65.47563 385.7776 68.16396 379.01125 68.16396 curveto
+378.41347 68.16396 lineto
+371.64711 68.16396 365.1587 65.47563 360.37454 60.69145 curveto
+355.59036 55.90729 352.90204 49.41888 352.90204 42.65253 curveto
+352.90204 42.05475 lineto
+352.90204 35.28839 355.59036 28.79999 360.37454 24.01582 curveto
+365.1587 19.23164 371.64711 16.54332 378.41347 16.54332 curveto
+379.01125 16.54332 lineto
+385.7776 16.54332 392.266 19.23164 397.05017 24.01582 curveto
+401.83435 28.79999 404.52267 35.28839 404.52267 42.05475 curveto closepath fill
+newpath 403.9249 42.05475 moveto
+404.52267 42.05475 lineto
+404.52267 42.65253 lineto
+403.9249 42.65253 lineto
+403.9249 35.88617 401.23657 29.39777 396.4524 24.6136 curveto
+391.66823 19.82942 385.17982 17.1411 378.41347 17.1411 curveto
+379.01125 17.1411 lineto
+372.24489 17.1411 365.75648 19.82942 360.97232 24.6136 curveto
+356.18814 29.39777 353.49982 35.88617 353.49982 42.65253 curveto
+353.49982 42.05475 lineto
+353.49982 48.8211 356.18814 55.30951 360.97232 60.09367 curveto
+365.75648 64.87785 372.24489 67.56618 379.01125 67.56618 curveto
+378.41347 67.56618 lineto
+385.17982 67.56618 391.66823 64.87785 396.4524 60.09367 curveto
+401.23657 55.30951 403.9249 48.8211 403.9249 42.05475 curveto closepath fill
+ 0 setgray
+newpath 375.27998 71.29742 moveto
+375.27998 70.1019 lineto
+376.47551 70.1019 lineto
+382.14473 70.1019 lineto
+382.14473 71.29742 lineto
+382.14473 74.69897 lineto
+380.9492 74.69897 lineto
+375.27998 74.69897 lineto
+375.27998 73.50345 lineto
+375.27998 70.1019 lineto
+376.47551 70.1019 lineto
+376.47551 71.29742 lineto
+376.47551 74.69897 lineto
+376.47551 73.50345 lineto
+382.14473 73.50345 lineto
+380.9492 73.50345 lineto
+380.9492 70.1019 lineto
+380.9492 71.29742 lineto
+ closepath fill
+newpath 376.4138 73.50345 moveto
+377.60933 73.50345 lineto
+381.01091 73.50345 lineto
+381.01091 74.69897 lineto
+381.01091 76.73993 lineto
+379.81538 76.73993 lineto
+376.4138 76.73993 lineto
+376.4138 75.5444 lineto
+ closepath fill
+newpath 376.4138 74.69897 moveto
+377.60933 74.69897 lineto
+377.60933 76.73993 lineto
+377.60933 75.5444 lineto
+381.01091 75.5444 lineto
+379.81538 75.5444 lineto
+379.81538 73.50345 lineto
+379.81538 74.69897 lineto
+ closepath fill
+newpath 383.7838 80.19307 moveto
+384.97932 80.19307 lineto
+384.97932 81.3886 lineto
+384.97932 82.89223 384.38191 84.33409 383.31877 85.39725 curveto
+382.25562 86.46039 380.81375 87.0578 379.31012 87.0578 curveto
+378.1146 87.0578 lineto
+376.61096 87.0578 375.1691 86.46039 374.10594 85.39725 curveto
+373.0428 84.33409 372.44539 82.89223 372.44539 81.3886 curveto
+372.44539 80.19307 lineto
+372.44539 78.68944 373.0428 77.24757 374.10594 76.18442 curveto
+375.1691 75.12128 376.61096 74.52386 378.1146 74.52386 curveto
+379.31012 74.52386 lineto
+380.81375 74.52386 382.25562 75.12128 383.31877 76.18442 curveto
+384.38191 77.24757 384.97932 78.68944 384.97932 80.19307 curveto
+384.97932 81.3886 lineto
+383.7838 81.3886 lineto
+383.7838 79.88496 383.18639 78.4431 382.12325 77.37994 curveto
+381.06009 76.3168 379.61823 75.71939 378.1146 75.71939 curveto
+379.31012 75.71939 lineto
+377.80649 75.71939 376.36462 76.3168 375.30147 77.37994 curveto
+374.23833 78.4431 373.64091 79.88496 373.64091 81.3886 curveto
+373.64091 80.19307 lineto
+373.64091 81.6967 374.23833 83.13857 375.30147 84.20172 curveto
+376.36462 85.26486 377.80649 85.86227 379.31012 85.86227 curveto
+378.1146 85.86227 lineto
+379.61823 85.86227 381.06009 85.26486 382.12325 84.20172 curveto
+383.18639 83.13857 383.7838 81.6967 383.7838 80.19307 curveto closepath fill
+newpath 384.5002 80.34251 moveto
+385.39684 80.34251 lineto
+385.39684 81.23915 lineto
+385.39684 82.89316 384.73969 84.47922 383.57022 85.6487 curveto
+382.40074 86.81816 380.81468 87.47531 379.16068 87.47531 curveto
+378.26404 87.47531 lineto
+376.61003 87.47531 375.02397 86.81816 373.85449 85.6487 curveto
+372.68503 84.47922 372.02788 82.89316 372.02788 81.23915 curveto
+372.02788 80.34251 lineto
+372.02788 78.6885 372.68503 77.10245 373.85449 75.93297 curveto
+375.02397 74.7635 376.61003 74.10635 378.26404 74.10635 curveto
+379.16068 74.10635 lineto
+380.81468 74.10635 382.40074 74.7635 383.57022 75.93297 curveto
+384.73969 77.10245 385.39684 78.6885 385.39684 80.34251 curveto
+385.39684 81.23915 lineto
+384.5002 81.23915 lineto
+384.5002 79.58514 383.84305 77.99908 382.67358 76.8296 curveto
+381.5041 75.66014 379.91805 75.00299 378.26404 75.00299 curveto
+379.16068 75.00299 lineto
+377.50667 75.00299 375.92061 75.66014 374.75113 76.8296 curveto
+373.58167 77.99908 372.92451 79.58514 372.92451 81.23915 curveto
+372.92451 80.34251 lineto
+372.92451 81.99652 373.58167 83.58258 374.75113 84.75206 curveto
+375.92061 85.92152 377.50667 86.57867 379.16068 86.57867 curveto
+378.26404 86.57867 lineto
+379.91805 86.57867 381.5041 85.92152 382.67358 84.75206 curveto
+383.84305 83.58258 384.5002 81.99652 384.5002 80.34251 curveto closepath fill
+ 0.5 setgray
+newpath 384.38156 42.35364 moveto
+384.38156 43.85727 383.78415 45.29913 382.72101 46.36229 curveto
+381.65785 47.42543 380.21599 48.02284 378.71236 48.02284 curveto
+377.20872 48.02284 375.76686 47.42543 374.7037 46.36229 curveto
+373.64056 45.29913 373.04315 43.85727 373.04315 42.35364 curveto
+373.04315 40.85 373.64056 39.40814 374.7037 38.34499 curveto
+375.76686 37.28185 377.20872 36.68443 378.71236 36.68443 curveto
+380.21599 36.68443 381.65785 37.28185 382.72101 38.34499 curveto
+383.78415 39.40814 384.38156 40.85 384.38156 42.35364 curveto closepath fill
+ 0 setgray
+newpath 383.7838 41.75587 moveto
+384.97932 41.75587 lineto
+384.97932 42.9514 lineto
+384.97932 44.45503 384.38191 45.8969 383.31877 46.96005 curveto
+382.25562 48.0232 380.81375 48.6206 379.31012 48.6206 curveto
+378.1146 48.6206 lineto
+376.61096 48.6206 375.1691 48.0232 374.10594 46.96005 curveto
+373.0428 45.8969 372.44539 44.45503 372.44539 42.9514 curveto
+372.44539 41.75587 lineto
+372.44539 40.25224 373.0428 38.81038 374.10594 37.74722 curveto
+375.1691 36.68408 376.61096 36.08667 378.1146 36.08667 curveto
+379.31012 36.08667 lineto
+380.81375 36.08667 382.25562 36.68408 383.31877 37.74722 curveto
+384.38191 38.81038 384.97932 40.25224 384.97932 41.75587 curveto
+384.97932 42.9514 lineto
+383.7838 42.9514 lineto
+383.7838 41.44777 383.18639 40.0059 382.12325 38.94275 curveto
+381.06009 37.87961 379.61823 37.2822 378.1146 37.2822 curveto
+379.31012 37.2822 lineto
+377.80649 37.2822 376.36462 37.87961 375.30147 38.94275 curveto
+374.23833 40.0059 373.64091 41.44777 373.64091 42.9514 curveto
+373.64091 41.75587 lineto
+373.64091 43.2595 374.23833 44.70137 375.30147 45.76453 curveto
+376.36462 46.82767 377.80649 47.42508 379.31012 47.42508 curveto
+378.1146 47.42508 lineto
+379.61823 47.42508 381.06009 46.82767 382.12325 45.76453 curveto
+383.18639 44.70137 383.7838 43.2595 383.7838 41.75587 curveto closepath fill
+ 0.68 setgray
+newpath 356.31477 43.48755 moveto
+356.78297 55.51852 366.67227 65.03046 378.71236 65.03046 curveto
+390.75244 65.03046 400.64174 55.51852 401.10994 43.48755 curveto
+385.4317 43.48755 lineto
+384.87253 46.76212 382.03432 49.15675 378.71236 49.15675 curveto
+375.3904 49.15675 372.55219 46.76212 371.99301 43.48755 curveto
+ closepath fill
+ 0 setgray
+newpath 355.86646 43.93587 moveto
+355.86646 43.03923 lineto
+356.76309 43.03923 lineto
+357.2313 55.0702 367.12059 64.58214 379.16068 64.58214 curveto
+378.26404 64.58214 lineto
+390.30412 64.58214 400.19342 55.0702 400.66162 43.03923 curveto
+400.66162 43.93587 lineto
+384.98338 43.93587 lineto
+385.88002 43.93587 lineto
+385.32085 47.21043 382.48264 49.60507 379.16068 49.60507 curveto
+378.26404 49.60507 lineto
+374.94208 49.60507 372.10387 47.21043 371.5447 43.93587 curveto
+355.86646 43.93587 lineto
+355.86646 43.03923 lineto
+356.76309 43.03923 lineto
+372.44133 43.03923 lineto
+373.0005 46.3138 375.83871 48.70844 379.16068 48.70844 curveto
+378.26404 48.70844 lineto
+381.586 48.70844 384.42421 46.3138 384.98338 43.03923 curveto
+385.88002 43.03923 lineto
+401.55826 43.03923 lineto
+401.55826 43.93587 lineto
+401.09006 55.96684 391.20076 65.47878 379.16068 65.47878 curveto
+378.26404 65.47878 lineto
+366.22395 65.47878 356.33466 55.96684 355.86646 43.93587 curveto closepath fill
+ 0.79 setgray
+newpath 401.10994 41.21973 moveto
+400.64174 29.18875 390.75244 19.67682 378.71236 19.67682 curveto
+366.67227 19.67682 356.78297 29.18875 356.31477 41.21973 curveto
+371.99301 41.21973 lineto
+372.55219 37.94516 375.3904 35.55052 378.71236 35.55052 curveto
+382.03432 35.55052 384.87253 37.94516 385.4317 41.21973 curveto
+ closepath fill
+ 0 setgray
+newpath 401.55826 40.77141 moveto
+401.55826 41.66805 lineto
+400.66162 41.66805 lineto
+400.19342 29.63707 390.30412 20.12514 378.26404 20.12514 curveto
+379.16068 20.12514 lineto
+367.12059 20.12514 357.2313 29.63707 356.76309 41.66805 curveto
+356.76309 40.77141 lineto
+372.44133 40.77141 lineto
+371.5447 40.77141 lineto
+372.10387 37.49684 374.94208 35.1022 378.26404 35.1022 curveto
+379.16068 35.1022 lineto
+382.48264 35.1022 385.32085 37.49684 385.88002 40.77141 curveto
+401.55826 40.77141 lineto
+401.55826 41.66805 lineto
+400.66162 41.66805 lineto
+384.98338 41.66805 lineto
+384.42421 38.39348 381.586 35.99884 378.26404 35.99884 curveto
+379.16068 35.99884 lineto
+375.83871 35.99884 373.0005 38.39348 372.44133 41.66805 curveto
+371.5447 41.66805 lineto
+355.86646 41.66805 lineto
+355.86646 40.77141 lineto
+356.33466 28.74043 366.22395 19.2285 378.26404 19.2285 curveto
+379.16068 19.2285 lineto
+391.20076 19.2285 401.09006 28.74043 401.55826 40.77141 curveto closepath fill
+newpath 355.9657 51.60075 moveto
+355.9657 52.19853 lineto
+355.36792 52.19853 lineto
+354.11426 49.17209 353.469 45.92834 353.469 42.65253 curveto
+353.469 42.05475 lineto
+353.469 38.77893 354.11426 35.53519 355.36792 32.50874 curveto
+355.9657 32.50874 lineto
+355.9657 33.10652 lineto
+354.71204 36.13297 354.06677 39.37671 354.06677 42.65253 curveto
+354.06677 42.05475 lineto
+354.06677 45.33057 354.71204 48.57431 355.9657 51.60075 curveto closepath fill
+newpath 356.7144 33.24156 moveto
+356.96855 29.66502 lineto
+354.61922 32.3737 lineto
+ closepath fill
+newpath 401.45901 33.10652 moveto
+401.45901 32.50874 lineto
+402.0568 32.50874 lineto
+403.31046 35.53519 403.95572 38.77893 403.95572 42.05475 curveto
+403.95572 42.65253 lineto
+403.95572 45.92834 403.31046 49.17209 402.0568 52.19853 curveto
+401.45901 52.19853 lineto
+401.45901 51.60075 lineto
+402.71268 48.57431 403.35794 45.33057 403.35794 42.05475 curveto
+403.35794 42.65253 lineto
+403.35794 39.37671 402.71268 36.13297 401.45901 33.10652 curveto closepath fill
+newpath 400.71031 51.46571 moveto
+400.45616 55.04225 lineto
+402.8055 52.33357 lineto
+ closepath fill
+ 0 1 1 setrgbcolor
+newpath 378.71236 49.15675 moveto
+378.71236 65.03046 lineto
+380.69412 65.03047 382.66733 64.7707 384.58156 64.2578 curveto
+386.49579 63.74489 388.33452 62.98328 390.05077 61.9924 curveto
+382.1139 48.24533 lineto
+381.57262 48.43036 381.02538 48.59752 380.47308 48.74655 curveto
+379.8911 48.9036 379.30383 49.0404 378.71236 49.15675 curveto closepath fill
+ 0 setgray
+newpath 378.26404 48.70844 moveto
+379.16068 48.70844 lineto
+379.16068 49.60507 lineto
+379.16068 65.47878 lineto
+379.16068 64.58214 lineto
+379.16086 64.58214 lineto
+378.26422 64.58214 lineto
+380.24593 64.58215 382.21907 64.32237 384.13324 63.80948 curveto
+386.04747 63.29657 387.8862 62.53496 389.60245 61.54408 curveto
+389.60245 62.44072 lineto
+381.66559 48.69365 lineto
+382.56223 48.69365 lineto
+382.02094 48.87868 381.4737 49.04584 380.9214 49.19487 curveto
+380.33942 49.35191 379.75215 49.48872 379.16068 49.60507 curveto
+378.26404 49.60507 lineto
+378.26404 48.70844 lineto
+378.85551 48.59209 379.44278 48.45528 380.02477 48.29823 curveto
+380.57706 48.1492 381.1243 47.98204 381.66559 47.79701 curveto
+382.56223 47.79701 lineto
+390.49908 61.54408 lineto
+390.49908 62.44072 lineto
+388.78284 63.4316 386.9441 64.1932 385.02988 64.70612 curveto
+383.1157 65.21901 381.14256 65.47878 379.16086 65.47878 curveto
+378.26422 65.47878 lineto
+378.26404 65.47878 lineto
+378.26404 64.58214 lineto
+ closepath fill
+ 1 0 0 setrgbcolor
+newpath 378.26404 41.90532 moveto
+379.16068 41.90532 lineto
+379.16068 42.80196 lineto
+379.16068 66.61269 lineto
+378.26404 66.61269 lineto
+378.26404 65.71605 lineto
+ closepath fill
+newpath 378.26404 42.80196 moveto
+378.26404 41.90532 lineto
+379.16068 41.90532 lineto
+391.06604 62.52608 lineto
+391.06604 63.42271 lineto
+390.1694 63.42271 lineto
+ closepath fill
+newpath 388.50182 61.57736 moveto
+390.4658 60.44345 lineto
+391.75154 64.93823 lineto
+ closepath fill
+ 1 setgray
+newpath 361.97281 49.02284 moveto
+372.77507 49.02284 lineto
+372.77507 59.83064 lineto
+361.97281 59.83064 lineto
+ closepath fill
+ 0 setgray
+363.97281 51.02284 moveto
+(U)
+ cmmi10 9.96265 fshow
+ 1 setgray
+newpath 372.48169 26.34602 moveto
+384.94302 26.34602 lineto
+384.94302 37.15382 lineto
+372.48169 37.15382 lineto
+ closepath fill
+ 0 setgray
+374.48169 28.34602 moveto
+(K)
+ cmmi10 9.96265 fshow
+371.7933 0.1594 moveto
+(TC)
+ tex-latin1@Times-Bold 9.96265 fshow
+226.78 90.6347 moveto
+(NIX)
+ tex-latin1@Times-Bold 9.96265 fshow
+247.5322 90.6347 moveto
+(Scheme)
+ tex-latin1@Times-Bold 9.96265 fshow
+showpage
+%%EOF
+
+%%EndDocument
+ @endspecial eop
+%%Page: 1 2
+1 1 bop 1229 1233 a Fa(1)p eop
+%%Trailer
+end
+userdict /end-hook known{end-hook}if
+%%EOF
